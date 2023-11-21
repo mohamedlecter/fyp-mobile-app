@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
-
+import React from "react";
+import { Image } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Tasks from "../pages/Tasks";
 import Home from "../pages/Home";
@@ -36,9 +35,9 @@ const BottomTabs = () => {
         },
       })}
     >
+      <Tab.Screen name="HomeTab" component={Home} />
+      <Tab.Screen name="TasksTab" component={Tasks} />
       <Tab.Screen name="ProfileTab" component={Profile} />
-      <Tab.Screen name="TasksTab" component={Tasks} /> 
-      <Tab.Screen name="HomeTab" component={Home} />  {/* change to homestak */}
     </Tab.Navigator>
   );
 };
