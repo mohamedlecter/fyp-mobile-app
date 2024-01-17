@@ -37,36 +37,14 @@ export const login = (email, password) => async (dispatch) => {
         payload: err.response ? err.response.data.msg : err.message,
       });
     });
-
-  // try {
-  //   const res = await axios.post(`${API}/user/login`, {
-  //     email,
-  //     password,
-  //   });
-  //   if (res && res.data) {
-  //     console.log(res.data);
-  //     dispatch({
-  //       type: LOGIN_SUCCESS,
-  //       payload: res.data,
-  //     });
-  //   } else {
-  //     throw new Error("Invalid response");
-  //   }
-  // } catch (error) {
-  //   dispatch({
-  //     type: LOGIN_FAIL,
-  //     payload: error.response ? error.response.data.msg : error.message,
-  //   });
-  // }
 };
 
-export const signup = (name, email, password, phone) => async (dispatch) => {
+export const signUp = (email, password, username) => async (dispatch) => {
   try {
     const data = await axios.post(`${API}/user/signup`, {
-      name,
       email,
       password,
-      phone,
+      username,
     });
 
     console.log(data);
