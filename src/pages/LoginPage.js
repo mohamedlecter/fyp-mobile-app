@@ -14,6 +14,7 @@ import { login } from "../redux/actions/users";
 import { Formik } from "formik";
 import { Button } from "@rneui/themed";
 import * as yup from "yup";
+import { PRIMARY_GREEN } from "../colors";
 
 const LoginPage = () => {
   const navigation = useNavigation();
@@ -249,7 +250,7 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   buttonStyle: {
-    backgroundColor: "#00a86b",
+    backgroundColor: PRIMARY_GREEN,
     borderRadius: 16,
     padding: 12,
   },

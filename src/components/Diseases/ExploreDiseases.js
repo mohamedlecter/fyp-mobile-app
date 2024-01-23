@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import Header from "../components/Header";
 
-export default function Home() {
+const ExploreDiseases = () => {
   return (
     <View>
-      <Header />
-      <Text>Home</Text>
+      <Text>ExploreDiseases</Text>
     </View>
   );
-}
+};
+
+export default ExploreDiseases;
 
 const styles = StyleSheet.create({});

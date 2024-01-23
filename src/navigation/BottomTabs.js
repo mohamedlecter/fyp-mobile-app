@@ -1,9 +1,13 @@
 import React from "react";
 import { Image } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Tasks from "../pages/Tasks";
 import Home from "../pages/Home";
+import Diagnose from "../pages/Diagnose";
 import Profile from "../pages/Profile";
+import Icon from "react-native-vector-icons/FontAwesome";
+import Icon2 from "react-native-vector-icons/AntDesign";
+import MyPlants from "../pages/MyPlants";
+import { PRIMARY_GREEN, PRIMARY_GREY } from "../colors";
 
 const Tab = createBottomTabNavigator();
 
@@ -14,29 +18,32 @@ const BottomTabs = () => {
       screenOptions={({ route }) => ({
         tabBarShowLabel: false,
         headerShown: false,
-        tabBarIcon: ({ focused }) => {
+        tabBarIcon: ({ focused, color }) => {
+          const tintColor = focused ? PRIMARY_GREEN : PRIMARY_GREY;
           let iconSource;
-          // Determine the icon source based on the route name
           switch (route.name) {
             case "ProfileTab":
-              iconSource = require("../../assets/profile-icon.png");
+              iconSource = <Icon2 name="user" size={30} color={tintColor} />;
               break;
-            case "TasksTab":
-              iconSource = require("../../assets/saved-icon.png");
+            case "DiagnoseTab":
+              iconSource = <Icon2 name="Safety" size={30} color={tintColor} />;
+              break;
+            case "MyPlantsTab":
+              iconSource = <Icon name="leaf" size={30} color={tintColor} />;
               break;
             case "HomeTab":
-              iconSource = require("../../assets/home-icon.png");
+              iconSource = <Icon name="home" size={30} color={tintColor} />;
               break;
             default:
               iconSource = null;
           }
-          const tintColor = focused ? "#3D0087" : "#A39EA9";
-          return <Image source={iconSource} style={{ tintColor }} />;
+          return iconSource;
         },
       })}
     >
       <Tab.Screen name="HomeTab" component={Home} />
-      <Tab.Screen name="TasksTab" component={Tasks} />
+      <Tab.Screen name="DiagnoseTab" component={Diagnose} />
+      <Tab.Screen name="MyPlantsTab" component={MyPlants} />
       <Tab.Screen name="ProfileTab" component={Profile} />
     </Tab.Navigator>
   );
