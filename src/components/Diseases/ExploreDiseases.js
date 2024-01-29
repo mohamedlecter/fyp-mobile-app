@@ -1,10 +1,10 @@
+import React, { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
 
 const ExploreDiseases = () => {
   return (
     <View>
-      <Text>ExploreDiseases</Text>
+      <Text>Explore Diseases</Text>
     </View>
   );
 };

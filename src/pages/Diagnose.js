@@ -6,6 +6,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import CommonDiseases from "../components/Diseases/CommonDiseases";
 import CheckPlant from "../components/Diseases/CheckPlant";
 import AskExpert from "../components/Diseases/AskExpert";
+import ExploreDiseases from "../components/Diseases/ExploreDiseases";
 
 const Diagnose = () => {
   return (
@@ -28,6 +29,8 @@ const Diagnose = () => {
         </View>
 
         <AskExpert />
+
+        <ExploreDiseases />
       </View>
     </View>
   );

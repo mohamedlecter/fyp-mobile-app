@@ -1,26 +1,36 @@
+import React, { useEffect } from "react";
 import { StyleSheet, Text, View, Image, FlatList } from "react-native";
-import { PRIMARY_GREEN, PRIMARY_GREY } from "../../colors";
+import { useDispatch, useSelector } from "react-redux";
+import { getDiseases } from "../../redux/actions/plants"; // Import the action to fetch diseases
+import { PRIMARY_GREY } from "../../colors";
 
 const CommonDiseases = () => {
-  const diseases = [
-    { name: "Bacterial Blight" },
-    { name: "Bacterial Blight", name: "Bacterial Blight" },
-    { name: "Bacterial Blight" },
-  ];
+  const dispatch = useDispatch();
+  const plantDiseases = useSelector((state) => state.plantReducer.diseases);
+
+  useEffect(() => {
+    // Dispatch the action to fetch diseases when the component mounts
+    dispatch(getDiseases());
+  }, [dispatch]);
 
   const renderDisease = ({ item }) => {
+    const firstImage =
+      item.images && item.images.length > 0 ? item.images[0] : null;
+
     return (
       <View style={styles.diease}>
-        <Image
-          source={require("../../../assets/checkPlant.png")}
-          style={styles.diseaseImg}
-        />
+        {firstImage && (
+          <Image
+            source={{ uri: firstImage.original_url }}
+            style={styles.diseaseImg}
+          />
+        )}
         <View style={styles.diseaseTexts}>
-          <Text style={styles.heading2}>{item.name}</Text>
+          <Text style={styles.heading2}>{item.common_name}</Text>
           <Text
             style={[styles.heading2, { color: PRIMARY_GREY, marginTop: 2 }]}
           >
-            {item.name}
+            {item.scientific_name}
           </Text>
         </View>
       </View>
@@ -31,7 +41,7 @@ const CommonDiseases = () => {
     <FlatList
       horizontal
       showsHorizontalScrollIndicator={false}
-      data={diseases}
+      data={plantDiseases?.data || []} // Use data from Redux store, handle empty data
       renderItem={renderDisease}
       keyExtractor={(item, index) => index.toString()}
     />
@@ -46,8 +56,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   diseaseImg: {
-    width: 80,
-    height: 80,
+    width: 100,
+    height: 100,
     borderRadius: 10,
   },
   diseaseTexts: {
