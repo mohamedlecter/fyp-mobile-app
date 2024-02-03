@@ -30,7 +30,19 @@ const Diagnose = () => {
 
         <AskExpert />
 
-        <ExploreDiseases />
+        <View style={styles.commonDiseases}>
+          <View style={styles.header}>
+            <Text style={styles.heading1}>Explore Diseases </Text>
+            <View style={styles.viewAllContainer}>
+              <Text style={styles.viewAllText}>View All</Text>
+              <Icon name="chevron-right" size={15} color={PRIMARY_GREEN} />
+            </View>
+          </View>
+
+          <View style={styles.diseaseContainer}>
+            <ExploreDiseases />
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -40,7 +52,7 @@ export default Diagnose;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 16,
   },
   heading1: {
     fontSize: 16,

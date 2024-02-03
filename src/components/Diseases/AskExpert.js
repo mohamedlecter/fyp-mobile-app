@@ -6,21 +6,21 @@ const AskExpert = () => {
   return (
     <View style={styles.askContainer}>
       <Image
-        source={require("../../../assets/checkPlant.png")}
+        source={require("../../../assets/bot.png")}
         style={styles.askImg}
       />
       <View style={styles.texts}>
         <View>
           <Text style={[styles.heading1, { marginBottom: 5 }]}>
-            Check Plant Expert
+            Ask Plant Bot
           </Text>
           <Text style={[styles.heading2, { color: PRIMARY_GREY }]}>
-            Our experts are redy to help you with your problems.
+            Our bot is redy to help you with your problems.
           </Text>
         </View>
         <View style={styles.btnContainer}>
           <Button
-            title="Ask The Experts"
+            title="Ask Plant Bot"
             buttonStyle={styles.buttonStyle}
             titleStyle={styles.buttonText}
             containerStyle={styles.buttonContainer}

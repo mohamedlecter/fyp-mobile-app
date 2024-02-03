@@ -42,8 +42,9 @@ const Article = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Plant Diseases</Text>
       <FlatList
+        horizontal
+        showsHorizontalScrollIndicator={false}
         data={diseases}
         keyExtractor={(item) => item.pageid.toString()}
         renderItem={({ item }) => (
@@ -54,8 +55,6 @@ const Article = () => {
             >
               {item.title}
             </Text>
-            <Text style={styles.diseaseSnippet}>{item.snippet}</Text>
-            {/* You can display more disease information here */}
           </View>
         )}
       />
@@ -75,14 +74,16 @@ const styles = StyleSheet.create({
   },
   diseaseItem: {
     padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    backgroundColor: "#FFF",
+    borderRadius: 10,
+    // marginHorizontal: 10,
+    marginRight: 10,
+    alignItems: "center",
+    justifyContent: "center",
   },
   diseaseTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    textDecorationLine: "underline",
-    color: "blue",
   },
   diseaseSnippet: {
     fontSize: 16,

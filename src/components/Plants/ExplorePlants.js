@@ -51,22 +51,24 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   plantItem: {
-    marginHorizontal: 10,
+    marginRight: 10,
   },
   image: {
     width: 100,
     height: 100,
     resizeMode: "cover",
-    marginBottom: 10,
+    marginBottom: 7,
     borderRadius: 10,
   },
   commonName: {
     fontSize: 18,
     fontWeight: "bold",
+    textAlign: "center",
   },
   scientificName: {
     fontSize: 16,
     color: "#888",
+    textAlign: "center",
   },
 });
 

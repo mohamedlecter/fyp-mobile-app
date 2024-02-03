@@ -20,18 +20,16 @@ const CommonDiseases = () => {
     return (
       <View style={styles.diease}>
         {firstImage && (
-          <Image
-            source={{ uri: firstImage.original_url }}
-            style={styles.diseaseImg}
-          />
+          <View style={styles.diseaseImgContainer}>
+            <Image
+              source={{ uri: firstImage.original_url }}
+              style={styles.diseaseImg}
+            />
+          </View>
         )}
         <View style={styles.diseaseTexts}>
-          <Text style={styles.heading2}>{item.common_name}</Text>
-          <Text
-            style={[styles.heading2, { color: PRIMARY_GREY, marginTop: 2 }]}
-          >
-            {item.scientific_name}
-          </Text>
+          <Text style={styles.commonName}>{item.common_name}</Text>
+          <Text style={styles.scientificName}>{item.scientific_name}</Text>
         </View>
       </View>
     );
@@ -41,7 +39,7 @@ const CommonDiseases = () => {
     <FlatList
       horizontal
       showsHorizontalScrollIndicator={false}
-      data={plantDiseases?.data || []} // Use data from Redux store, handle empty data
+      data={plantDiseases?.data || []}
       renderItem={renderDisease}
       keyExtractor={(item, index) => index.toString()}
     />
@@ -52,19 +50,31 @@ export default CommonDiseases;
 
 const styles = StyleSheet.create({
   diease: {
+    marginRight: 10,
+  },
+  diseaseImgContainer: {
     alignItems: "center",
     justifyContent: "center",
   },
   diseaseImg: {
     width: 100,
     height: 100,
+    resizeMode: "cover",
+    marginBottom: 7,
     borderRadius: 10,
   },
   diseaseTexts: {
-    marginHorizontal: 10,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  heading2: {
-    fontSize: 16,
+  commonName: {
+    fontSize: 18,
     fontWeight: "bold",
+    textAlign: "center",
+  },
+  scientificName: {
+    fontSize: 16,
+    color: "#888",
+    textAlign: "center",
   },
 });

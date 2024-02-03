@@ -2,11 +2,7 @@ import React, { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 const ExploreDiseases = () => {
-  return (
-    <View>
-      <Text>Explore Diseases</Text>
-    </View>
-  );
+  return <View>{/* <Text>Explore Diseases</Text> */}</View>;
 };
 
 export default ExploreDiseases;

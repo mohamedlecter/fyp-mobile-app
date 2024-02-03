@@ -5532,6 +5532,11 @@ react-native-gesture-handler@~2.12.0:
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
+react-native-image-picker@^7.1.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-7.1.0.tgz#1a41cc45ccdc177c2ebf7c7accee0ceadc36abd8"
+  integrity sha512-An0hn2mwqjGAA2mbsXdHRTyoMMklGPT9stIjE2zvkegU7CdoFhowqvVHfnELJNZnfAiSQuIaeY//z0r1R0lsgw==
+
 react-native-paper@^5.11.1:
   version "5.12.1"
   resolved "https://registry.npmjs.org/react-native-paper/-/react-native-paper-5.12.1.tgz"
@@ -5540,6 +5545,11 @@ react-native-paper@^5.11.1:
     "@callstack/react-theme-provider" "^3.0.9"
     color "^3.1.2"
     use-latest-callback "^0.1.5"
+
+react-native-permissions@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-4.1.1.tgz#6c185f9ec45069fa14cf8992bed6b67fc8981478"
+  integrity sha512-wdIHMwmDZ6pRVsgAgF7mn/pJEuJd5wJDGENqvFDJs2lW4BSZeN++ZFsA6FgOqUs/2276Oj7rslQgVaxdOsi6yw==
 
 react-native-ratings@^8.1.0:
   version "8.1.0"

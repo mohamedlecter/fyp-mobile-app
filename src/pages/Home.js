@@ -3,12 +3,30 @@ import { PRIMARY_GREEN, PRIMARY_GREY } from "../colors";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Header from "../components/Header";
 import ExplorePlants from "../components/Plants/ExplorePlants";
+import Article from "../components/Plants/Articles";
+import AskExpert from "../components/Diseases/AskExpert";
 
 export default function Home() {
   return (
     <View>
       <Header />
       <View View style={styles.container}>
+        <View style={styles.arricles}>
+          <View style={styles.header}>
+            <Text style={styles.heading1}>Recent Article</Text>
+            <View style={styles.viewAllContainer}>
+              <Text style={styles.viewAllText}>View All</Text>
+              <Icon name="chevron-right" size={15} color={PRIMARY_GREEN} />
+            </View>
+          </View>
+
+          <View style={styles.articlesContainer}>
+            <Article />
+          </View>
+        </View>
+
+        <AskExpert />
+
         <View style={styles.explorePlants}>
           <View style={styles.header}>
             <Text style={styles.heading1}>Explore Plants</Text>
@@ -29,7 +47,7 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 16,
   },
   heading1: {
     fontSize: 16,
@@ -57,5 +75,8 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
     marginRight: 10,
     color: PRIMARY_GREEN,
+  },
+  articlesContainer: {
+    marginBottom: 16,
   },
 });
