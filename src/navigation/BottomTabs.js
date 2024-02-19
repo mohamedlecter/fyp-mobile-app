@@ -1,7 +1,6 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Home from "../pages/Home";
 import Diagnose from "../pages/Diagnose";
 import Profile from "../pages/Profile";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -9,6 +8,7 @@ import Icon2 from "react-native-vector-icons/AntDesign";
 import MyPlants from "../pages/MyPlants";
 import { PRIMARY_GREEN, PRIMARY_GREY } from "../colors";
 import SnapPlant from "../pages/SnapPlant";
+import HomeStack from "./HomeSTack";
 
 const Tab = createBottomTabNavigator();
 
@@ -49,7 +49,7 @@ const BottomTabs = () => {
         },
       })}
     >
-      <Tab.Screen name="HomeTab" component={Home} />
+      <Tab.Screen name="HomeTab" component={HomeStack} />
       <Tab.Screen name="DiagnoseTab" component={Diagnose} />
       <Tab.Screen name="SnapPlant" component={SnapPlant} />
       <Tab.Screen name="MyPlantsTab" component={MyPlants} />

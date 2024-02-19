@@ -1,24 +1,34 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, FlatList, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 
 const ExplorePlants = () => {
   const [plants, setPlants] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
-    const fetchPlants = async () => {
-      try {
-        const response = await axios.get(
-          "https://trefle.io/api/v1/plants?token=1ifEfn6on210vOhfQYKoD93IFHsgtASVOb-eNSMVvZw&page=10"
-        );
-        setPlants(response.data.data);
-      } catch (error) {
-        console.error("Error fetching plant data:", error);
-      }
-    };
-
-    fetchPlants();
+    axios
+      .get("http://10.0.2.2:5000/plant/")
+      .then((response) => {
+        console.log(response.data);
+        setPlants(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching plant dat:", error);
+      });
   }, []);
+
+  const handleNavigate = (id) => {
+    navigation.navigate("PlantDetails", { id });
+  };
 
   return (
     <View style={styles.container}>
@@ -28,12 +38,13 @@ const ExplorePlants = () => {
         data={plants}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <View style={styles.plantItem}>
-            {console.log(item)}
-            <Image source={{ uri: item.image_url }} style={styles.image} />
-            <Text style={styles.commonName}>{item.common_name}</Text>
-            <Text style={styles.scientificName}>{item.scientific_name}</Text>
-          </View>
+          <TouchableOpacity onPress={() => handleNavigate(item.id)}>
+            <View style={styles.plantItem}>
+              <Image source={{ uri: item.image }} style={styles.image} />
+              <Text style={styles.commonName}>{item.title}</Text>
+              <Text style={styles.scientificName}>{item.scientific_name}</Text>
+            </View>
+          </TouchableOpacity>
         )}
       />
     </View>
