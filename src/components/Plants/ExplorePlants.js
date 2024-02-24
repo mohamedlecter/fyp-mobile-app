@@ -6,6 +6,7 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
@@ -13,16 +14,18 @@ import { useNavigation } from "@react-navigation/native";
 const ExplorePlants = () => {
   const [plants, setPlants] = useState([]);
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(true); // Set initial loading state to true
 
   useEffect(() => {
     axios
       .get("http://10.0.2.2:5000/plant/")
       .then((response) => {
-        console.log(response.data);
         setPlants(response.data);
+        setLoading(false); // Set loading state to false after data is fetchedd
       })
       .catch((error) => {
-        console.error("Error fetching plant dat:", error);
+        console.error("Error fetching plant dataasss:", error);
+        setLoading(false);
       });
   }, []);
 
@@ -32,6 +35,7 @@ const ExplorePlants = () => {
 
   return (
     <View style={styles.container}>
+      {loading ? <ActivityIndicator size="small" color="#000000" /> : null}
       <FlatList
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -40,7 +44,11 @@ const ExplorePlants = () => {
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => handleNavigate(item.id)}>
             <View style={styles.plantItem}>
-              <Image source={{ uri: item.image }} style={styles.image} />
+              <Image
+                source={{ uri: item.image }}
+                style={styles.image}
+                loadingIndicatorSource={require("../../../assets/loading.gif")}
+              />
               <Text style={styles.commonName}>{item.title}</Text>
               <Text style={styles.scientificName}>{item.scientific_name}</Text>
             </View>

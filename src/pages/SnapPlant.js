@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import { Button } from "@rneui/themed";
+import { useNavigation } from "@react-navigation/native";
 
 export default function SnapPlant() {
   const [pickedImagePath, setPickedImagePath] = useState("");
@@ -10,6 +18,8 @@ export default function SnapPlant() {
   const [camera, setCamera] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [disease, setDisease] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Added isLoading state
+  const navigation = useNavigation();
 
   useEffect(() => {
     (async () => {
@@ -50,6 +60,8 @@ export default function SnapPlant() {
 
   const uploadImage = async (imageUri) => {
     try {
+      setIsLoading(true); // Set isLoading to true when starting the upload
+
       const formData = new FormData();
       formData.append("image", {
         uri: imageUri,
@@ -71,10 +83,20 @@ export default function SnapPlant() {
 
       const data = await response.json();
       console.log(data);
-      setDisease(data.disease);
+      setDisease(data.disease.replace(/__/g, " ")); // Converts disease name to readable format
+
+      console.log("disease: ", data.disease.replace(/__/g, " "));
+
+      navigateToPlantDiseasePage(data.disease.replace(/__/g, " ")); // Navigate to plant disease page
     } catch (error) {
       console.error("Error uploading image:", error);
+    } finally {
+      setIsLoading(false); // Set isLoading to false when the upload is completed or failed
     }
+  };
+
+  const navigateToPlantDiseasePage = (diseaseName) => {
+    navigation.navigate("PlantDisease", { diseaseName }); // Navigate to plant disease page with diseaseName as parameter
   };
 
   return (
@@ -110,7 +132,11 @@ export default function SnapPlant() {
           onPress={takePicture}
           disabled={!hasCameraPermission}
         />
-        {disease ? <Text>disease: {disease}</Text> : null}
+        {isLoading ? ( // Show loading indicator when isLoading is true
+          <ActivityIndicator size="large" color="blue" />
+        ) : disease ? (
+          <Text>disease: {disease}</Text>
+        ) : null}
       </View>
     </View>
   );
