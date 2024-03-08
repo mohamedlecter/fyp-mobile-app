@@ -96,7 +96,7 @@ export default function SnapPlant() {
   };
 
   const navigateToPlantDiseasePage = (diseaseName) => {
-    navigation.navigate("PlantDisease", { diseaseName }); // Navigate to plant disease page with diseaseName as parameter
+    navigation.navigate("PlantsStack", { diseaseName }); // Navigate to plant disease page with diseaseName as parameter
   };
 
   return (

@@ -1,45 +1,69 @@
-import { StyleSheet, Text, View } from "react-native";
-import { PRIMARY_GREEN, PRIMARY_GREY } from "../colors";
-import Icon from "react-native-vector-icons/FontAwesome";
+import React from "react";
+import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import Header from "../components/Header";
-import ExplorePlants from "../components/Plants/ExplorePlants";
-import Article from "../components/Plants/Articles";
-import AskExpert from "../components/Diseases/AskExpert";
 
 export default function Home() {
+  const navigation = useNavigation();
+
+  const navigateToScreen = (screenName) => {
+    navigation.navigate(screenName);
+  };
+
   return (
-    <View>
+    <View style={styles.container}>
       <Header />
-      <View View style={styles.container}>
-        <View style={styles.arricles}>
-          <View style={styles.header}>
-            <Text style={styles.heading1}>Recent Article</Text>
-            <View style={styles.viewAllContainer}>
-              <Text style={styles.viewAllText}>View All</Text>
-              <Icon name="chevron-right" size={15} color={PRIMARY_GREEN} />
-            </View>
-          </View>
 
-          <View style={styles.articlesContainer}>
-            <Article />
-          </View>
-        </View>
+      <View style={styles.row}>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          style={styles.tabContainer}
+          onPress={() => navigateToScreen("SnapPlant")}
+        >
+          <Image
+            source={require("../../assets/camera(2).png")}
+            style={styles.image}
+          />
+          <Text style={styles.heading2}>Tab to Diagnose your plant</Text>
+        </TouchableOpacity>
 
-        <AskExpert />
+        <TouchableOpacity
+          activeOpacity={0.6}
+          style={styles.tabContainer}
+          onPress={() => navigateToScreen("MyPlantsTab")}
+        >
+          <Image
+            source={require("../../assets/bot.png")}
+            style={styles.image}
+          />
+          <Text style={styles.heading2}>Tab to Ask Plant Bot</Text>
+        </TouchableOpacity>
+      </View>
 
-        <View style={styles.explorePlants}>
-          <View style={styles.header}>
-            <Text style={styles.heading1}>Explore Plants</Text>
-            <View style={styles.viewAllContainer}>
-              <Text style={styles.viewAllText}>View All</Text>
-              <Icon name="chevron-right" size={15} color={PRIMARY_GREEN} />
-            </View>
-          </View>
+      <View style={styles.row}>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          style={styles.tabContainer}
+          onPress={() => navigateToScreen("PlantsTab")}
+        >
+          <Image
+            source={require("../../assets/botanic.png")}
+            style={styles.image}
+          />
+          <Text style={styles.heading2}>Tab to Learn more about plants</Text>
+        </TouchableOpacity>
 
-          <View style={styles.plantsContainer}>
-            <ExplorePlants />
-          </View>
-        </View>
+        <TouchableOpacity
+          activeOpacity={0.6}
+          style={styles.tabContainer}
+          onPress={() => navigateToScreen("MyPlantsTab")}
+        >
+          <Image
+            source={require("../../assets/calendar.png")}
+            style={styles.image}
+          />
+          <Text style={styles.heading2}>Tab to check your care calendar</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -49,34 +73,31 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
   },
-  heading1: {
-    fontSize: 16,
-    fontWeight: "700",
-    fontFamily: "Roboto",
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 16,
+  },
+  tabContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+    borderRadius: 16,
+    elevation: 2,
+    backgroundColor: "white",
+    marginHorizontal: 8,
+  },
+  image: {
+    width: 80,
+    height: 80,
+    resizeMode: "contain",
   },
   heading2: {
     fontSize: 14,
     fontWeight: "600",
     fontFamily: "Roboto",
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  viewAllContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  viewAllText: {
-    fontSize: 14,
-    fontWeight: "700",
-    fontFamily: "Roboto",
-    marginRight: 10,
-    color: PRIMARY_GREEN,
-  },
-  articlesContainer: {
-    marginBottom: 16,
+    marginTop: 5,
+    textAlign: "center",
   },
 });

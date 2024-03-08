@@ -31,7 +31,7 @@ export const login = (email, password) => async (dispatch) => {
       });
     })
     .catch((err) => {
-      console.log("Error:", err);
+      console.log("Error logging in:", err);
       dispatch({
         type: LOGIN_FAIL,
         payload: err.response ? err.response.data.msg : err.message,

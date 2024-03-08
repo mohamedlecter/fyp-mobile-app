@@ -11,13 +11,19 @@ import axios from "axios";
 import Icon from "react-native-vector-icons/Ionicons";
 import Icon2 from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
+import { Button } from "@rneui/themed";
+import { PRIMARY_GREEN } from "../colors";
+import { useDispatch, useSelector } from "react-redux";
 
 const PlantDetails = ({ route }) => {
   const [plantDetails, setPlantDetails] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedItem, setSelectedItem] = useState("OverView");
+  const [selectedItem, setSelectedItem] = useState("Overview");
   const navigation = useNavigation();
   const { id } = route.params;
+  const user = useSelector((state) => state.userReducer.user);
+  const userId = user.user._id;
+  const [plantAdded, setPlantAdded] = useState(false);
 
   useEffect(() => {
     axios
@@ -32,6 +38,25 @@ const PlantDetails = ({ route }) => {
       });
   }, [id]);
 
+  const addPlant = () => {
+    const requestData = {
+      user_id: userId,
+      plant_id: id,
+    };
+
+    axios
+      .post("http://10.0.2.2:5000/user_plant/add_plant", requestData)
+      .then((response) => {
+        setPlantAdded(true);
+        setTimeout(() => {
+          navigation.navigate("MyPlantsTab");
+        }, 2000);
+      })
+      .catch((error) => {
+        console.error("Error adding plant:", error);
+      });
+  };
+
   const handleNavigateBack = () => {
     navigation.goBack();
   };
@@ -42,14 +67,14 @@ const PlantDetails = ({ route }) => {
 
   if (loading) {
     return (
-      <View style={styles.container}>
+      <View style={styles.loadingContainer}>
         <Text>Loading...</Text>
       </View>
     );
   }
 
   return (
-    <ScrollView>
+    <ScrollView style={styles.container}>
       <View style={styles.headerContainer}>
         <TouchableOpacity onPress={handleNavigateBack}>
           <Icon name="arrow-back-outline" size={25} />
@@ -58,130 +83,129 @@ const PlantDetails = ({ route }) => {
         <Icon2 name="bookmark-o" size={25} />
       </View>
 
-      <View style={styles.container}>
-        <View style={styles.imageContainer}>
-          <Image
-            source={{ uri: plantDetails.image }}
-            style={styles.image}
-            loadingIndicatorSource={require("../../assets/loading.gif")}
-          />
+      <View style={styles.imageContainer}>
+        <Image
+          source={
+            plantDetails.image
+              ? { uri: plantDetails.image }
+              : require("../../assets/defaultImage.png")
+          }
+          style={styles.image}
+          loadingIndicatorSource={require("../../assets/loading.gif")}
+        />
+      </View>
+
+      <View style={styles.detailsContainer}>
+        <Text style={styles.title}>{plantDetails.title}</Text>
+        <View style={styles.infoContainer}>
+          <Text style={styles.label}>Common Name:</Text>
+          <Text style={styles.value}>{plantDetails.common_name}</Text>
         </View>
-
-        <View style={styles.nameContainer}>
-          <Text style={styles.heading}>{plantDetails.title}</Text>
-          <View style={styles.commonNameContainer}>
-            <Text style={styles.commonName}>Common Name : </Text>
-            <Text style={styles.commonName}>{plantDetails.common_name}</Text>
-          </View>
-
-          <View style={styles.commonNameContainer}>
-            <Text style={styles.commonName}>Scientific Name : </Text>
-            <Text style={styles.commonName}>
-              {plantDetails.scientific_name}
-            </Text>
-          </View>
+        <View style={styles.infoContainer}>
+          <Text style={styles.label}>Scientific Name:</Text>
+          <Text style={styles.value}>{plantDetails.scientific_name}</Text>
         </View>
+      </View>
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {["OverView", "Uses & Benefits", "Propagation", "Diseases"].map(
-            (item) => (
-              <TouchableOpacity
-                key={item}
+      <View style={styles.tabContainer}>
+        {["Overview", "Uses & Benefits", "Propagation", "Diseases"].map(
+          (item) => (
+            <TouchableOpacity
+              key={item}
+              style={[
+                styles.tabItem,
+                selectedItem === item && styles.selectedTabItem,
+              ]}
+              onPress={() => handleItemPress(item)}
+            >
+              <Text
                 style={[
-                  styles.buttonContainer,
-                  selectedItem === item && styles.selectedButtonContainer,
+                  styles.tabText,
+                  selectedItem === item && styles.selectedTabText,
                 ]}
-                onPress={() => handleItemPress(item)}
               >
-                <Text
-                  style={[
-                    styles.buttonText,
-                    selectedItem === item && styles.selectedButtonText,
-                  ]}
-                >
-                  {item}
-                </Text>
-              </TouchableOpacity>
-            )
-          )}
-        </ScrollView>
-
-        {selectedItem === "OverView" && (
-          <View style={styles.descriptionContainer}>
-            <Text style={styles.heading}>Description</Text>
-            <Text style={styles.description} numberOfLines={10}>
-              {plantDetails.description}
-            </Text>
-          </View>
+                {item}
+              </Text>
+            </TouchableOpacity>
+          )
         )}
+      </View>
 
-        {selectedItem === "Uses & Benefits" && (
-          <View style={styles.descriptionContainer}>
-            <Text style={styles.heading}>Uses & Benefits</Text>
-            <Text style={styles.description}>{plantDetails.uses}</Text>
-          </View>
-        )}
+      {selectedItem === "Overview" && (
+        <View style={styles.descriptionContainer}>
+          <Text style={styles.heading}>Description</Text>
+          <Text style={styles.description} numberOfLines={10}>
+            {plantDetails.description}
+          </Text>
+        </View>
+      )}
 
-        {selectedItem === "Propagation" && (
-          <View style={styles.descriptionContainer}>
-            <Text style={styles.heading}>Propagation</Text>
+      {selectedItem === "Uses & Benefits" && (
+        <View style={styles.descriptionContainer}>
+          <Text style={styles.heading}>Uses & Benefits</Text>
+          <Text style={styles.description}>{plantDetails.uses}</Text>
+        </View>
+      )}
 
-            <View>
-              <Text style={styles.heading}>Basic Requirements</Text>
-              <Text style={styles.description} numberOfLines={5}>
-                {plantDetails.basic_requirements}
+      {selectedItem === "Propagation" && (
+        <View style={styles.descriptionContainer}>
+          <Text style={styles.heading}>Propagation</Text>
+          <Text style={styles.subHeading}>Basic Requirements</Text>
+          <Text style={styles.description}>
+            {plantDetails.basic_requirements}
+          </Text>
+          <Text style={styles.subHeading}>Growing from Seed</Text>
+          <Text style={styles.description}>{plantDetails.growing}</Text>
+          <Text style={styles.subHeading}>General Care and Maintenance</Text>
+          <Text style={styles.description}>{plantDetails.care}</Text>
+          <Text style={styles.subHeading}>Harvesting</Text>
+          <Text style={styles.description}>{plantDetails.harvesting}</Text>
+        </View>
+      )}
+
+      {selectedItem === "Diseases" && (
+        <View style={styles.descriptionContainer}>
+          <Text style={styles.heading}>Diseases</Text>
+          {plantDetails.diseases.map((disease, index) => (
+            <View key={index}>
+              <Text style={styles.subHeading}>{disease.name}</Text>
+              <Text style={styles.description}>
+                Category: {disease.category}
+              </Text>
+              <Text style={styles.description}>Cause: {disease.cause}</Text>
+              <Text style={styles.description}>
+                Symptoms: {disease.symptoms}
+              </Text>
+              <Text style={styles.description}>
+                Treatment: {disease.treatment}
               </Text>
             </View>
+          ))}
+        </View>
+      )}
 
-            <View>
-              <Text style={styles.heading}>Growing from Seed</Text>
-              <Text style={styles.description} numberOfLines={5}>
-                {plantDetails.growing}
-              </Text>
-            </View>
-
-            <View>
-              <Text style={styles.heading}>General care and maintenance</Text>
-              <Text style={styles.description} numberOfLines={5}>
-                {plantDetails.care}
-              </Text>
-            </View>
-
-            <View>
-              <Text style={styles.heading}>Harvesting</Text>
-              <Text style={styles.description} numberOfLines={5}>
-                {plantDetails.harvesting}
-              </Text>
-            </View>
-          </View>
-        )}
-
-        {selectedItem === "Diseases" && (
-          <View style={styles.descriptionContainer}>
-            <Text style={styles.heading}>Diseases</Text>
-            {plantDetails.diseases.map((disease, index) => (
-              <View key={index}>
-                <Text style={styles.heading}>{disease.name}</Text>
-                <Text style={styles.description}>
-                  Category: {disease.category}
-                </Text>
-                <Text style={styles.description}>Cause: {disease.cause}</Text>
-                <Text style={styles.description}>
-                  Symptoms: {disease.symptoms}
-                </Text>
-                <Text style={styles.description}>
-                  Treatment: {disease.treatment}
-                </Text>
-              </View>
-            ))}
-          </View>
-        )}
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Add Plant"
+          buttonStyle={styles.addButtonStyle}
+          titleStyle={styles.addButtonTitle}
+          onPress={addPlant}
+        />
       </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   headerContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -193,53 +217,93 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "Roboto",
   },
-  container: {
-    padding: 16,
-  },
   imageContainer: {
-    marginBottom: 10,
+    alignItems: "center",
+    marginBottom: 20,
   },
   image: {
     width: 380,
-    height: 180,
+    height: 200,
     borderRadius: 10,
     resizeMode: "stretch",
   },
-  nameContainer: {
+  detailsContainer: {
+    marginBottom: 20,
+    paddingHorizontal: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
     marginBottom: 10,
   },
-  commonNameContainer: {
+  infoContainer: {
     flexDirection: "row",
+    marginBottom: 5,
   },
-  description: {
+  label: {
+    fontWeight: "bold",
+    marginRight: 5,
+  },
+  value: {
+    flex: 1,
+  },
+  tabContainer: {
+    flexDirection: "row",
+    marginBottom: 10,
+    paddingHorizontal: 20,
+  },
+  tabItem: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    marginRight: 10,
+  },
+  selectedTabItem: {
+    backgroundColor: PRIMARY_GREEN,
+    borderColor: PRIMARY_GREEN,
+  },
+  tabText: {
+    color: "#333",
     fontSize: 16,
-    textAlign: "justify",
-    marginVertical: 2,
+  },
+  selectedTabText: {
+    color: "#fff",
+  },
+  descriptionContainer: {
+    paddingHorizontal: 20,
+    marginBottom: 20,
   },
   heading: {
     fontSize: 20,
     fontWeight: "bold",
+    marginBottom: 10,
+  },
+  subHeading: {
+    fontSize: 18,
+    fontWeight: "bold",
     marginTop: 10,
     marginBottom: 5,
   },
-  buttonText: {
+  description: {
     fontSize: 16,
-    color: "#00a86b",
+    textAlign: "justify",
+    marginBottom: 10,
   },
   buttonContainer: {
-    padding: 5,
-    borderRadius: 15,
-    justifyContent: "center",
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#00a86b",
-    marginRight: 5,
+    marginVertical: 20,
   },
-  selectedButtonContainer: {
-    backgroundColor: "#00a86b",
+  addButtonStyle: {
+    backgroundColor: PRIMARY_GREEN,
+    borderRadius: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 30,
   },
-  selectedButtonText: {
-    color: "white",
+  addButtonTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
 
