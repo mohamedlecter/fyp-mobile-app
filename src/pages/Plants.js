@@ -8,39 +8,41 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   RefreshControl,
-  TextInput,
 } from "react-native";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../components/Header";
 import Icon from "react-native-vector-icons/AntDesign";
-import { SearchBar } from "@rneui/themed";
+import { Searchbar } from "react-native-paper";
+import { searchPlants, getPlants } from "../redux/actions/plants";
 
 const Plants = () => {
-  const [plants, setPlants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const plants = useSelector((state) => state.plantReducer.plants);
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = () => {
-    axios
-      .get("http://10.0.2.2:5000/plant/")
-      .then((response) => {
-        setPlants(response.data);
-        console.log("Plants:", response.data);
-        setLoading(false);
-        setRefreshing(false);
-      })
+    setLoading(true);
+    // Fetch all plants if search query is empty
+    dispatch(getPlants())
+      .then(() => setLoading(false))
       .catch((error) => {
-        console.error("Error fetching plant dataa:", error);
+        console.error("Error fetching all plants:", error);
         setLoading(false);
-        setRefreshing(false);
       });
+  };
+
+  const onCancel = () => {
+    // Reset search query and fetch all plants
+    setSearchQuery("");
+    fetchData();
   };
 
   const handleNavigate = (id) => {
@@ -49,42 +51,33 @@ const Plants = () => {
   };
 
   const handleSearch = () => {
-    // This could be a filter operation on the plants array
-    console.log("Searching for:", searchQuery);
+    // Fetch data based on search query
+    dispatch(searchPlants(searchQuery))
+      .then(() => setLoading(false))
+      .catch((error) => {
+        console.error("Error searching plants:", error);
+        setLoading(false);
+      });
   };
 
   const refreshData = () => {
     setRefreshing(true);
+    // Fetch data based on search query
     fetchData();
+    setRefreshing(false);
   };
 
   return (
     <View style={styles.container}>
       <Header />
       <View style={styles.searchContainer}>
-        <SearchBar
-          platform="android"
-          containerStyle={{
-            color: "black",
-          }}
-          inputContainerStyle={{
-            color: "black",
-          }}
-          inputStyle={{
-            color: "black",
-          }}
-          leftIconContainerStyle={{}}
-          rightIconContainerStyle={{}}
-          loadingProps={{}}
+        <Searchbar
           onChangeText={setSearchQuery}
-          onClearText={() => console.log(onClearText())}
           placeholder="Search..."
-          placeholderTextColor="black"
-          cancelButtonTitle="Cancel"
-          cancelButtonProps={{}}
-          onCancel={() => console.log(onCancel())}
           value={searchQuery}
           onSearch={handleSearch}
+          onIconPress={handleSearch}
+          onClearIconPress={onCancel}
         />
       </View>
       {loading ? (
@@ -140,24 +133,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   searchContainer: {
-    flexDirection: "row",
     marginBottom: 20,
-  },
-  searchInput: {
-    flex: 1,
-    marginRight: 10,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-  },
-  searchButton: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  searchButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
   },
   activityIndicator: {
     marginTop: 20,

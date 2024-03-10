@@ -12,12 +12,15 @@ import {
   GET_USERS_FAIL,
   DELETE_USER,
   DELETE_USER_FAIL,
+  FETCH_USER_PLANTS,
+  FETCH_USER_PLANTS_FAIL,
 } from "../constants/users";
 
 const initialState = {
   user: null,
   isAuth: false,
   isLoading: true,
+  userPlants: [],
 };
 
 export default userReducer = (state = initialState, { type, payload }) => {
@@ -113,6 +116,19 @@ export default userReducer = (state = initialState, { type, payload }) => {
         isAuth: false,
         isLoading: false,
       };
+    case FETCH_USER_PLANTS:
+      return {
+        ...state,
+        userPlants: payload,
+        isLoading: false,
+      };
+    case FETCH_USER_PLANTS_FAIL:
+      return {
+        ...state,
+        userPlants: null,
+        isLoading: false,
+      };
+
     default:
       return state;
   }

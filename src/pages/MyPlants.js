@@ -1,21 +1,46 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView, Image } from "react-native";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Image,
+  RefreshControl,
+} from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import Header from "../components/Header";
+import { fetchUserPlants } from "../redux/actions/users";
 
 const MyPlants = () => {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.userReducer.user);
-  const userPlants = user.user.plants;
-  const [plants, setPlants] = useState([]);
+  const userId = user.user._id;
+  const plants = useSelector((state) => state.userReducer.userPlants);
+  const error = useSelector((state) => state.userReducer.error);
+  const [refreshing, setRefreshing] = useState(false);
+
+  console.log("User plants:", plants);
 
   useEffect(() => {
-    setPlants(userPlants); // Set the user's plants in the local state
-  }, [userPlants]);
+    dispatch(fetchUserPlants(userId)); // Fetch user's plants when component mounts
+  }, []);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    dispatch(fetchUserPlants(userId)); // Fetch user's plants when refreshing
+    setRefreshing(false);
+  };
 
   return (
     <View style={styles.container}>
       <Header title="My Plants" />
-      <ScrollView contentContainerStyle={styles.scrollView}>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        {error && <Text>Error: {error}</Text>}
         {plants.map((plant, index) => (
           <View key={index} style={styles.plantItem}>
             <Image

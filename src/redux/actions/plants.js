@@ -3,29 +3,71 @@ import {
   GET_PLANTS_FAIL,
   GET_PLANT,
   GET_PLANT_FAIL,
-  GET_DISEASES,
-  GET_DISEASES_FAIL,
-  GET_DISEASE,
-  GET_DISEASE_FAIL,
+  SEARCH_PLANTS,
+  SEARCH_PLANTS_FAIL,
+  ADD_PLANT,
+  ADD_PLANT_FAIL,
 } from "../constants/plants";
 import axios from "axios";
 import API from "../../../api";
 
 export const getPlants = () => async (dispatch) => {
   try {
-    const response = await axios.get(`${API}/plant`);
-    console.log(response.data); // Log the data from the response
+    const response = await axios.get(`${API}/plant/`);
+    console.log("Get plants response:", response.data);
     dispatch({
       type: GET_PLANTS,
-      payload: response.data, // Update to use response.data
+      payload: response.data,
     });
   } catch (error) {
-    console.log(error);
+    console.error("Error fetching plants:", error);
     dispatch({
       type: GET_PLANTS_FAIL,
       payload: error.response
         ? error.response.data.msg
-        : "Failed to fetch plants", // Provide a default error message
+        : "Failed to fetch plants",
+    });
+  }
+};
+
+export const searchPlants = (searchQuery) => async (dispatch) => {
+  try {
+    const response = await axios.get(`${API}plant/search/${searchQuery}`);
+    console.log("Search plants response:", response.data);
+    dispatch({
+      type: SEARCH_PLANTS,
+      payload: response.data,
+    });
+  } catch (error) {
+    console.error("Error searching plants:", error);
+    dispatch({
+      type: SEARCH_PLANTS_FAIL,
+      payload: error.response
+        ? error.response.data.msg
+        : "Failed to search plants",
+    });
+  }
+};
+
+export const addPlant = (userId, plantId) => async (dispatch) => {
+  try {
+    const requestData = {
+      user_id: userId,
+      plant_id: plantId,
+    };
+
+    const response = await axios.post(
+      `${API}/user_plant/add_plant`,
+      requestData
+    );
+    dispatch({
+      type: ADD_PLANT,
+      payload: response.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADD_PLANT_FAIL,
+      payload: error.response ? error.response.data.msg : "Failed to add plant",
     });
   }
 };
@@ -33,55 +75,16 @@ export const getPlants = () => async (dispatch) => {
 export const getPlant = (id) => async (dispatch) => {
   try {
     const response = await axios.get(`${API}/plant/${id}`);
-    console.log(response.data); // Log the data from the response
     dispatch({
       type: GET_PLANT,
-      payload: response.data, // Update to use response.data
+      payload: response.data,
     });
   } catch (error) {
-    console.log(error);
     dispatch({
       type: GET_PLANT_FAIL,
       payload: error.response
         ? error.response.data.msg
-        : "Failed to fetch plant", // Provide a default error message
-    });
-  }
-};
-
-export const getDiseases = () => async (dispatch) => {
-  try {
-    const response = await axios.get(
-      "https://perenual.com/api/pest-disease-list?key=sk-PFs2655e223d2d8613080&page=1&q=Leaf"
-    );
-    dispatch({
-      type: GET_DISEASES,
-      payload: response.data,
-    });
-  } catch (error) {
-    console.error("Error fetching diseases:", error);
-    dispatch({
-      type: GET_DISEASES_FAIL,
-      payload: error.message || "Failed to fetch diseases", // Use error message or a default message
-    });
-  }
-};
-
-export const getDisease = (id) => async (dispatch) => {
-  try {
-    const response = await axios.get(`${API}/plant/diseases/${id}`);
-    console.log(response.data); // Log the data from the response
-    dispatch({
-      type: GET_DISEASE,
-      payload: response.data, // Update to use response.data
-    });
-  } catch (error) {
-    console.log(error);
-    dispatch({
-      type: GET_DISEASE_FAIL,
-      payload: error.response
-        ? error.response.data.msg
-        : "Failed to fetch disease", // Provide a default error message
+        : "Failed to fetch plant",
     });
   }
 };

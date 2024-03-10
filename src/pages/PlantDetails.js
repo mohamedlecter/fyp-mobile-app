@@ -7,54 +7,38 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import axios from "axios";
 import Icon from "react-native-vector-icons/Ionicons";
 import Icon2 from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
 import { Button } from "@rneui/themed";
 import { PRIMARY_GREEN } from "../colors";
 import { useDispatch, useSelector } from "react-redux";
+import { addPlant, getPlant } from "../redux/actions/plants";
 
 const PlantDetails = ({ route }) => {
-  const [plantDetails, setPlantDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState("Overview");
   const navigation = useNavigation();
   const { id } = route.params;
   const user = useSelector((state) => state.userReducer.user);
   const userId = user.user._id;
-  const [plantAdded, setPlantAdded] = useState(false);
+  const dispatch = useDispatch();
+  const plantDetails = useSelector((state) => state.plantReducer.plant);
 
   useEffect(() => {
-    axios
-      .get(`http://10.0.2.2:5000/plant/${id}`)
-      .then((response) => {
-        setPlantDetails(response.data);
-        setLoading(false);
-      })
+    dispatch(getPlant(id))
+      .then(() => setLoading(false))
       .catch((error) => {
         console.error("Error fetching plant details:", error);
         setLoading(false);
       });
   }, [id]);
 
-  const addPlant = () => {
-    const requestData = {
-      user_id: userId,
-      plant_id: id,
-    };
-
-    axios
-      .post("http://10.0.2.2:5000/user_plant/add_plant", requestData)
-      .then((response) => {
-        setPlantAdded(true);
-        setTimeout(() => {
-          navigation.navigate("MyPlantsTab");
-        }, 2000);
-      })
-      .catch((error) => {
-        console.error("Error adding plant:", error);
-      });
+  const addPlantToUser = () => {
+    dispatch(addPlant(userId, id));
+    setTimeout(() => {
+      navigation.navigate("MyPlantsTab");
+    }, 2000);
   };
 
   const handleNavigateBack = () => {
@@ -189,7 +173,7 @@ const PlantDetails = ({ route }) => {
           title="Add Plant"
           buttonStyle={styles.addButtonStyle}
           titleStyle={styles.addButtonTitle}
-          onPress={addPlant}
+          onPress={addPlantToUser}
         />
       </View>
     </ScrollView>

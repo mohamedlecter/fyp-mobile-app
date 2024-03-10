@@ -12,6 +12,8 @@ import {
   GET_USERS_FAIL,
   DELETE_USER,
   DELETE_USER_FAIL,
+  FETCH_USER_PLANTS,
+  FETCH_USER_PLANTS_FAIL,
 } from "../constants/users";
 import axios from "axios";
 import API from "../../../api";
@@ -137,6 +139,26 @@ export const deleteUser = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_USER_FAIL,
+      payload: error.response ? error.response.data.msg : error.message,
+    });
+  }
+};
+export const fetchUserPlants = (id) => async (dispatch) => {
+  try {
+    const res = await axios.get(`${API}/plant/user/${id}`);
+    console.log("User plants response:", res.data);
+    if (res) {
+      dispatch({
+        type: FETCH_USER_PLANTS,
+        payload: res.data,
+      });
+    } else {
+      throw new Error("Invalid response");
+    }
+  } catch (error) {
+    console.error("Error fetching user plants:", error);
+    dispatch({
+      type: FETCH_USER_PLANTS_FAIL,
       payload: error.response ? error.response.data.msg : error.message,
     });
   }
