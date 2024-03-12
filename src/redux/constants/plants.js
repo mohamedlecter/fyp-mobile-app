@@ -8,3 +8,6 @@ export const SEARCH_PLANTS_FAIL = "SEARCH_PLANTS_FAIL";
 
 export const ADD_PLANT = "ADD_PLANT";
 export const ADD_PLANT_FAIL = "ADD_PLANT_FAIL";
+
+export const GET_DISEASE = "GET_DISEASE";
+export const GET_DISEASE_FAIL = "GET_DISEASE_FAIL";

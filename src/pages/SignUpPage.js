@@ -39,9 +39,13 @@ const SignUpPage = () => {
 
     try {
       await dispatch(signUp(values.email, values.password, values.username));
-      navigation.navigate("Bottom Tabs");
+      navigation.navigate("Login");
     } catch (error) {
-      setError("Sign-up failed. Please try again.");
+      if (error.response && error.response.status === 401) {
+        setError("Invalid email or password. Please try again.");
+      } else {
+        setError("Sign-up failed. Please try again.");
+      }
     }
 
     setLoading(false);

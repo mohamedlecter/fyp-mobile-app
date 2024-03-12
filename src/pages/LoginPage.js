@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,7 +8,6 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/actions/users";
@@ -38,10 +38,24 @@ const LoginPage = () => {
     setError("");
 
     try {
-      await dispatch(login(values.email, values.password));
-      navigation.navigate("Bottom Tabs");
+      const loginResponse = await dispatch(
+        login(values.email, values.password)
+      );
+
+      console.log("Login response:", loginResponse);
+
+      // Check if login response indicates success
+      if (loginResponse && loginResponse.message === "Login successful") {
+        navigation.navigate("Bottom Tabs");
+      } else {
+        setError("Invalid email or password. Please try again.");
+      }
     } catch (error) {
-      setError("Login failed. Please try again.");
+      if (error.response && error.response.status === 401) {
+        setError("Invalid email or password. Please try again.");
+      } else {
+        setError("Login failed. Please try again.");
+      }
     }
 
     setLoading(false);

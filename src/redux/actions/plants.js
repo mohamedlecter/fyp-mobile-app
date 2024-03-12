@@ -7,6 +7,8 @@ import {
   SEARCH_PLANTS_FAIL,
   ADD_PLANT,
   ADD_PLANT_FAIL,
+  GET_DISEASE,
+  GET_DISEASE_FAIL,
 } from "../constants/plants";
 import axios from "axios";
 import API from "../../../api";
@@ -32,7 +34,7 @@ export const getPlants = () => async (dispatch) => {
 
 export const searchPlants = (searchQuery) => async (dispatch) => {
   try {
-    const response = await axios.get(`${API}plant/search/${searchQuery}`);
+    const response = await axios.get(`${API}/plant/search/${searchQuery}`);
     console.log("Search plants response:", response.data);
     dispatch({
       type: SEARCH_PLANTS,
@@ -85,6 +87,23 @@ export const getPlant = (id) => async (dispatch) => {
       payload: error.response
         ? error.response.data.msg
         : "Failed to fetch plant",
+    });
+  }
+};
+
+export const getDisease = (diseaseName) => async (dispatch) => {
+  try {
+    const response = await axios.get(`${API}/plant/disease/${diseaseName}`);
+    dispatch({
+      type: GET_DISEASE,
+      payload: response.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_DISEASE_FAIL,
+      payload: error.response
+        ? error.response.data.msg
+        : "Failed to fetch disease details",
     });
   }
 };

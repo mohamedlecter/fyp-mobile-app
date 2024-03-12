@@ -18,27 +18,33 @@ import {
 import axios from "axios";
 import API from "../../../api";
 
+// Modify your login action to return the response
 export const login = (email, password) => async (dispatch) => {
   console.log("Request data:", { email, password });
-  axios
-    .post(`${API}/user/login`, {
+  try {
+    const res = await axios.post(`${API}/user/login`, {
       email,
       password,
-    })
-    .then((res) => {
-      console.log("Response after post data:", res.data);
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: res.data,
-      });
-    })
-    .catch((err) => {
-      console.log("Error logging in:", err);
-      dispatch({
-        type: LOGIN_FAIL,
-        payload: err.response ? err.response.data.msg : err.message,
-      });
     });
+
+    console.log("Response after post data:", res.data);
+
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: res.data,
+    });
+
+    return res.data; // Add this line to return the response
+  } catch (err) {
+    console.log("Error logging in:", err);
+
+    dispatch({
+      type: LOGIN_FAIL,
+      payload: err.response ? err.response.data.msg : err.message,
+    });
+
+    throw err; // Re-throw the error to be caught in handleLogin
+  }
 };
 
 export const signUp = (email, password, username) => async (dispatch) => {
@@ -55,11 +61,17 @@ export const signUp = (email, password, username) => async (dispatch) => {
       type: SIGNUP_SUCCESS,
       payload: data,
     });
+
+    return data;
   } catch (error) {
+    console.log("Error in sign-up:", err);
+
     dispatch({
       type: SIGNUP_FAIL,
       payload: error.response ? error.response.data.msg : error.message,
     });
+
+    throw error;
   }
 };
 

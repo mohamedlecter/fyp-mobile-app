@@ -63,31 +63,37 @@ export default function SnapPlant() {
       setIsLoading(true); // Set isLoading to true when starting the upload
 
       const formData = new FormData();
-      formData.append("image", {
+      formData.append("file", {
         uri: imageUri,
         name: "image.jpg",
         type: "image/jpg",
       });
 
-      const response = await fetch("http://10.0.2.2:5000/diagnose/", {
-        method: "POST",
-        body: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await fetch(
+        "https://us-central1-fyp-model-416403.cloudfunctions.net/predict",
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to upload image");
       }
 
       const data = await response.json();
-      console.log(data);
-      setDisease(data.disease.replace(/__/g, " ")); // Converts disease name to readable format
+      // Replace underscores with spaces in the disease name
+      const formattedDisease = data.class.replace(/_/g, " ");
+      console.log(formattedDisease);
+      setDisease(formattedDisease);
 
-      console.log("disease: ", data.disease.replace(/__/g, " "));
-
-      navigateToPlantDiseasePage(data.disease.replace(/__/g, " ")); // Navigate to plant disease page
+      // Navigate to the disease details page after 3 seconds
+      setTimeout(() => {
+        navigateToDiseaseDetails(formattedDisease);
+      }, 1000);
     } catch (error) {
       console.error("Error uploading image:", error);
     } finally {
@@ -95,8 +101,8 @@ export default function SnapPlant() {
     }
   };
 
-  const navigateToPlantDiseasePage = (diseaseName) => {
-    navigation.navigate("PlantsStack", { diseaseName }); // Navigate to plant disease page with diseaseName as parameter
+  const navigateToDiseaseDetails = (diseaseName) => {
+    navigation.navigate("DiseaseDetails", { diseaseName }); // Navigate to plant disease page with diseaseName as parameter
   };
 
   return (
