@@ -14,11 +14,15 @@ import {
   DELETE_USER_FAIL,
   FETCH_USER_PLANTS,
   FETCH_USER_PLANTS_FAIL,
+  FETCH_USER_PLANT,
+  FETCH_USER_PLANT_FAIL,
+  SAVE_CARE_REMINDER,
+  SAVE_CARE_REMINDER_FAIL,
 } from "../constants/users";
 import axios from "axios";
 import API from "../../../api";
 
-// Modify your login action to return the response
+// Modify your login action to return the responsmohamed test
 export const login = (email, password) => async (dispatch) => {
   console.log("Request data:", { email, password });
   try {
@@ -175,3 +179,49 @@ export const fetchUserPlants = (id) => async (dispatch) => {
     });
   }
 };
+
+export const fetchUserPlant = (userId, plantId) => async (dispatch) => {
+  try {
+    const res = await axios.get(`${API}/plant/user/${userId}/${plantId}`);
+    if (res) {
+      dispatch({
+        type: FETCH_USER_PLANT,
+        payload: res.data,
+      });
+      return res.data; // Return the fetched data
+    } else {
+      throw new Error("Invalid response");
+    }
+  } catch (error) {
+    console.error("Error fetching user plant:", error);
+    dispatch({
+      type: FETCH_USER_PLANT_FAIL,
+      payload: error.response ? error.response.data.msg : error.message,
+    });
+  }
+};
+
+export const saveCareReminder =
+  (user_id, plant_id, action, time) => async (dispatch) => {
+    try {
+      console.log(user_id, plant_id, action, time);
+      const response = await axios.post(
+        `${API}/plant/user/${user_id}/${plant_id}/care_reminders`,
+        { action, time } // Send only necessary data in the request body
+      );
+      console.log("Save care reminder response:", response.data);
+      dispatch({
+        type: SAVE_CARE_REMINDER,
+        payload: response.data,
+      });
+      return response.data; // Return the response data
+    } catch (error) {
+      console.error("Error saving care reminder:", error);
+      dispatch({
+        type: SAVE_CARE_REMINDER_FAIL,
+        payload: error.response
+          ? error.response.data.msg
+          : "Failed to save care reminder",
+      });
+    }
+  };

@@ -14,6 +14,10 @@ import {
   DELETE_USER_FAIL,
   FETCH_USER_PLANTS,
   FETCH_USER_PLANTS_FAIL,
+  FETCH_USER_PLANT,
+  FETCH_USER_PLANT_FAIL,
+  SAVE_CARE_REMINDER,
+  SAVE_CARE_REMINDER_FAIL,
 } from "../constants/users";
 
 const initialState = {
@@ -21,6 +25,7 @@ const initialState = {
   isAuth: false,
   isLoading: true,
   userPlants: [],
+  userPlant: null,
 };
 
 export default userReducer = (state = initialState, { type, payload }) => {
@@ -128,7 +133,34 @@ export default userReducer = (state = initialState, { type, payload }) => {
         userPlants: null,
         isLoading: false,
       };
+    case FETCH_USER_PLANT:
+      return {
+        ...state,
+        userPlant: payload,
+        isLoading: false,
+      };
+    case FETCH_USER_PLANT_FAIL:
+      return {
+        ...state,
+        userPlant: null,
+        isLoading: false,
+      };
 
+    case SAVE_CARE_REMINDER:
+      return {
+        ...state,
+        userPlant: {
+          ...state.userPlant,
+          careReminders: payload,
+        },
+        isLoading: false,
+      };
+    case SAVE_CARE_REMINDER_FAIL:
+      return {
+        ...state,
+        userPlant: null,
+        isLoading: false,
+      };
     default:
       return state;
   }

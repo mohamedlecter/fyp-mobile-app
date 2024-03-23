@@ -10,6 +10,8 @@ import SnapPlant from "../pages/SnapPlant";
 import HomeStack from "./HomeStack";
 import PlantsStack from "./PlantsStack";
 import SnapPlantStack from "./SnapPlantStack";
+import MyPlantsStack from "./MyPlantsStack";
+import CalendarPage from "../pages/Calendar";
 
 const Tab = createBottomTabNavigator();
 
@@ -53,8 +55,8 @@ const BottomTabs = () => {
       <Tab.Screen name="HomeTab" component={HomeStack} />
       <Tab.Screen name="PlantsTab" component={PlantsStack} />
       <Tab.Screen name="SnapPlantTab" component={SnapPlantStack} />
-      <Tab.Screen name="MyPlantsTab" component={MyPlants} />
-      <Tab.Screen name="ProfileTab" component={Profile} />
+      <Tab.Screen name="MyPlantsTab" component={MyPlantsStack} />
+      <Tab.Screen name="CalendarTab" component={CalendarPage} />
     </Tab.Navigator>
   );
 };
