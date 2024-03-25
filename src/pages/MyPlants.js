@@ -33,9 +33,6 @@ const MyPlants = () => {
   };
 
   const handlePlantPress = (plantId) => {
-    console.log("Clicked plant ID:", plantId);
-    console.log("user id", userId);
-
     navigation.navigate("MyPlant", { plantId }); // Navigate to MyPlant screen with plantId as parameter
   };
 

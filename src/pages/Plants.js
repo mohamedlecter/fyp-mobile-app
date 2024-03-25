@@ -46,7 +46,6 @@ const Plants = () => {
   };
 
   const handleNavigate = (id) => {
-    console.log("Navigating to PlantDetails with ID:", id);
     navigation.navigate("PlantDetails", { id });
   };
 

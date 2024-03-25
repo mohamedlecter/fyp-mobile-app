@@ -18,14 +18,18 @@ import {
   FETCH_USER_PLANT_FAIL,
   SAVE_CARE_REMINDER,
   SAVE_CARE_REMINDER_FAIL,
+  GET_USER_REMINDER_DATES,
+  GET_USER_REMINDER_DATES_FAIL,
 } from "../constants/users";
 
 const initialState = {
   user: null,
   isAuth: false,
   isLoading: true,
+  users: [],
   userPlants: [],
   userPlant: null,
+  reminderDates: [{}],
 };
 
 export default userReducer = (state = initialState, { type, payload }) => {
@@ -54,7 +58,7 @@ export default userReducer = (state = initialState, { type, payload }) => {
     case GET_USERS_FAIL:
       return {
         ...state,
-        user: null,
+        users: null,
         isAuth: false,
         isLoading: false,
       };
@@ -145,7 +149,6 @@ export default userReducer = (state = initialState, { type, payload }) => {
         userPlant: null,
         isLoading: false,
       };
-
     case SAVE_CARE_REMINDER:
       return {
         ...state,
@@ -159,6 +162,18 @@ export default userReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         userPlant: null,
+        isLoading: false,
+      };
+    case GET_USER_REMINDER_DATES:
+      return {
+        ...state,
+        reminderDates: payload,
+        isLoading: false,
+      };
+    case GET_USER_REMINDER_DATES_FAIL:
+      return {
+        ...state,
+        reminderDates: null,
         isLoading: false,
       };
     default:

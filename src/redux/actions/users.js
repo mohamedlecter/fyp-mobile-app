@@ -18,6 +18,8 @@ import {
   FETCH_USER_PLANT_FAIL,
   SAVE_CARE_REMINDER,
   SAVE_CARE_REMINDER_FAIL,
+  GET_USER_REMINDER_DATES,
+  GET_USER_REMINDER_DATES_FAIL,
 } from "../constants/users";
 import axios from "axios";
 import API from "../../../api";
@@ -225,3 +227,23 @@ export const saveCareReminder =
       });
     }
   };
+
+export const fetchUserReminderDates = (userId) => async (dispatch) => {
+  try {
+    const res = await axios.get(`${API}/plant/user/${userId}/reminder_dates`);
+    if (res && res.data) {
+      dispatch({
+        type: GET_USER_REMINDER_DATES,
+        payload: res.data,
+      });
+    } else {
+      throw new Error("Invalid response");
+    }
+  } catch (error) {
+    console.error("Error fetching user reminder dates:", error);
+    dispatch({
+      type: GET_USER_REMINDER_DATES_FAIL,
+      payload: error.response ? error.response.data.msg : error.message,
+    });
+  }
+};
