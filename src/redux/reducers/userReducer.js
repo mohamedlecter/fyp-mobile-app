@@ -22,6 +22,8 @@ import {
   GET_USER_REMINDER_DATES_FAIL,
   GET_USER_REMINDER_DATES_BY_DATE,
   GET_USER_REMINDER_DATES_BY_DATE_FAIL,
+  UPDATE_REMINDER_COMPLETION_SUCCESS,
+  UPDATE_REMINDER_COMPLETION_FAIL,
 } from "../constants/users";
 
 const initialState = {
@@ -189,6 +191,21 @@ export default userReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         reminderDatesByDate: null,
+        isLoading: false,
+      };
+    case UPDATE_REMINDER_COMPLETION_SUCCESS:
+      return {
+        ...state,
+        userPlant: {
+          ...state.userPlant,
+          careReminders: payload,
+        },
+        isLoading: false,
+      };
+    case UPDATE_REMINDER_COMPLETION_FAIL:
+      return {
+        ...state,
+        userPlant: null,
         isLoading: false,
       };
     default:

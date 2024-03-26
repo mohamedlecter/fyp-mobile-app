@@ -22,6 +22,8 @@ import {
   GET_USER_REMINDER_DATES_FAIL,
   GET_USER_REMINDER_DATES_BY_DATE,
   GET_USER_REMINDER_DATES_BY_DATE_FAIL,
+  UPDATE_REMINDER_COMPLETION_SUCCESS,
+  UPDATE_REMINDER_COMPLETION_FAIL,
 } from "../constants/users";
 import axios from "axios";
 import API from "../../../api";
@@ -270,5 +272,35 @@ export const fetchUserReminderDatesByDate =
         type: GET_USER_REMINDER_DATES_BY_DATE_FAIL,
         payload: error.response ? error.response.data.msg : error.message,
       });
+    }
+  };
+export const updateReminderCompletion =
+  (userId, plantId, action, completed) => async (dispatch) => {
+    try {
+      const res = await axios.put(
+        `${API}/plant/user/${userId}/plant/${plantId}/care_reminders/${action}`,
+        {
+          userId,
+          plantId,
+          action,
+          completed,
+        }
+      );
+      console.log("Update reminder completion response:", res.data);
+      // Dispatch an action with the updated reminder completion status
+      dispatch({
+        type: UPDATE_REMINDER_COMPLETION_SUCCESS,
+        payload: res.data, // Assuming the response contains the updated data
+      });
+      return res.data; // Return the response data
+    } catch (error) {
+      console.error("Error updating reminder completion:", error);
+      dispatch({
+        type: UPDATE_REMINDER_COMPLETION_FAIL,
+        payload: error.response
+          ? error.response.data.msg
+          : "Failed to update reminder completion",
+      });
+      throw error;
     }
   };

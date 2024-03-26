@@ -11,7 +11,7 @@ import HomeStack from "./HomeStack";
 import PlantsStack from "./PlantsStack";
 import SnapPlantStack from "./SnapPlantStack";
 import MyPlantsStack from "./MyPlantsStack";
-import CalendarPage from "../pages/Calendar";
+import ChatBot from "../pages/ChatBot";
 
 const Tab = createBottomTabNavigator();
 
@@ -26,7 +26,7 @@ const BottomTabs = () => {
           const tintColor = focused ? PRIMARY_GREEN : PRIMARY_GREY;
           let iconSource;
           switch (route.name) {
-            case "ProfileTab":
+            case "ChatBotTab":
               iconSource = <Icon2 name="user" size={28} color={tintColor} />;
               break;
             case "PlantsTab":
@@ -56,7 +56,7 @@ const BottomTabs = () => {
       <Tab.Screen name="PlantsTab" component={PlantsStack} />
       <Tab.Screen name="SnapPlantTab" component={SnapPlantStack} />
       <Tab.Screen name="MyPlantsTab" component={MyPlantsStack} />
-      <Tab.Screen name="CalendarTab" component={CalendarPage} />
+      <Tab.Screen name="ChatBotTab" component={ChatBot} />
     </Tab.Navigator>
   );
 };
