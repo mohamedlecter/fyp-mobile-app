@@ -20,6 +20,8 @@ import {
   SAVE_CARE_REMINDER_FAIL,
   GET_USER_REMINDER_DATES,
   GET_USER_REMINDER_DATES_FAIL,
+  GET_USER_REMINDER_DATES_BY_DATE,
+  GET_USER_REMINDER_DATES_BY_DATE_FAIL,
 } from "../constants/users";
 
 const initialState = {
@@ -30,6 +32,7 @@ const initialState = {
   userPlants: [],
   userPlant: null,
   reminderDates: [{}],
+  reminderDatesByDate: null,
 };
 
 export default userReducer = (state = initialState, { type, payload }) => {
@@ -174,6 +177,18 @@ export default userReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         reminderDates: null,
+        isLoading: false,
+      };
+    case GET_USER_REMINDER_DATES_BY_DATE:
+      return {
+        ...state,
+        reminderDatesByDate: payload,
+        isLoading: false,
+      };
+    case GET_USER_REMINDER_DATES_BY_DATE_FAIL:
+      return {
+        ...state,
+        reminderDatesByDate: null,
         isLoading: false,
       };
     default:

@@ -66,7 +66,7 @@ const Myplant = ({ route }) => {
     };
 
     fetchPlantData();
-  }, []);
+  }, [dispatch, plantId, userId]);
 
   const onRefresh = async () => {
     setRefreshing(true);
