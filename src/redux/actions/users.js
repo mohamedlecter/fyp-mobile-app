@@ -28,7 +28,6 @@ import {
 import axios from "axios";
 import API from "../../../api";
 
-// Modify your login action to return the responsmohamed test
 export const login = (email, password) => async (dispatch) => {
   console.log("Request data:", { email, password });
   try {

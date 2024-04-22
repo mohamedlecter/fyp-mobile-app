@@ -42,7 +42,7 @@ const DiseaseDetails = ({ route }) => {
   console.log("Disease details:", diseaseDetails[0].matching_disease.category);
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.headerContainer}>
         <Button
           title="Back"

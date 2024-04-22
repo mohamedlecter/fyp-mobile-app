@@ -8,6 +8,10 @@ import Login from "./src/pages/LoginPage";
 import SignUp from "./src/pages/SignUpPage";
 import BottomTabs from "./src/navigation/BottomTabs";
 import CalendarPage from "./src/pages/Calendar";
+import PlantsStack from "./src/navigation/PlantsStack";
+import MyPlantsStack from "./src/navigation/MyPlantsStack";
+import ChatBot from "./src/pages/ChatBot";
+import SnapPlant from "./src/pages/SnapPlant";
 
 const Stack = createStackNavigator();
 
@@ -20,6 +24,10 @@ const App = () => {
           <Stack.Screen name="Signup" component={SignUp} />
           <Stack.Screen name="Bottom Tabs" component={BottomTabs} />
           <Stack.Screen name="CalendarTab" component={CalendarPage} />
+          <Stack.Screen name="PlantsTab" component={PlantsStack} />
+          <Stack.Screen name="SnapPlant" component={SnapPlant} />
+          <Stack.Screen name="MyPlantsTab" component={MyPlantsStack} />
+          <Stack.Screen name="ChatBotTab" component={ChatBot} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

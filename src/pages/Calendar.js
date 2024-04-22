@@ -98,6 +98,8 @@ const CalendarPage = () => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        showsVerticalScrollIndicator={false}
+        persistentScrollbar={true}
       >
         <View>
           <Calendar

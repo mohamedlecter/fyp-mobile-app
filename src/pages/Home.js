@@ -30,7 +30,7 @@ export default function Home() {
         <TouchableOpacity
           activeOpacity={0.6}
           style={styles.tabContainer}
-          onPress={() => navigateToScreen("MyPlantsTab")}
+          onPress={() => navigateToScreen("ChatBotTab")}
         >
           <Image
             source={require("../../assets/bot.png")}

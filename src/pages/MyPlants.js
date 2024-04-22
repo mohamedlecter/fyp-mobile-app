@@ -44,6 +44,7 @@ const MyPlants = () => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        showsVerticalScrollIndicator={false}
       >
         {error && <Text>Error: {error}</Text>}
         {plants &&

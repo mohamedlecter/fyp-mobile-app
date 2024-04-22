@@ -58,7 +58,7 @@ const PlantDetails = ({ route }) => {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.headerContainer}>
         <TouchableOpacity onPress={handleNavigateBack}>
           <Icon name="arrow-back-outline" size={25} />

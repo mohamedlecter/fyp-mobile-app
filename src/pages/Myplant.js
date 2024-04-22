@@ -141,6 +141,7 @@ const Myplant = ({ route }) => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        showsVerticalScrollIndicator={false}
       >
         {error && <Text style={styles.errorText}>Error: {error}</Text>}
         {plant && (
