@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Profile from "../pages/Profile";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Icon2 from "react-native-vector-icons/AntDesign";
+import Icon3 from "react-native-vector-icons/MaterialCommunityIcons";
 import MyPlants from "../pages/MyPlants";
 import { PRIMARY_GREEN, PRIMARY_GREY } from "../colors";
 import SnapPlant from "../pages/SnapPlant";
@@ -27,7 +28,9 @@ const BottomTabs = () => {
           let iconSource;
           switch (route.name) {
             case "ChatBotTab":
-              iconSource = <Icon2 name="user" size={28} color={tintColor} />;
+              iconSource = (
+                <Icon3 name="chat-question" size={28} color={tintColor} />
+              );
               break;
             case "PlantsTab":
               iconSource = <Icon2 name="Safety" size={28} color={tintColor} />;

@@ -12,31 +12,29 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../components/Header";
-import Icon from "react-native-vector-icons/AntDesign";
 import { Searchbar } from "react-native-paper";
 import { searchPlants, getPlants } from "../redux/actions/plants";
+import Error from "../components/Error";
+import { Button } from "@rneui/themed";
 
 const Plants = () => {
-  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const plants = useSelector((state) => state.plantReducer.plants);
+  const error = useSelector((state) => state.plantReducer.plantError);
+  const loading = useSelector((state) => state.plantReducer.loading);
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = () => {
-    setLoading(true);
     // Fetch all plants if search query is empty
-    dispatch(getPlants())
-      .then(() => setLoading(false))
-      .catch((error) => {
-        console.error("Error fetching all plants:", error);
-        setLoading(false);
-      });
+    dispatch(getPlants()).catch((error) => {
+      console.error("Error fetching all plants:", error);
+    });
   };
 
   const onCancel = () => {
@@ -51,12 +49,9 @@ const Plants = () => {
 
   const handleSearch = () => {
     // Fetch data based on search query
-    dispatch(searchPlants(searchQuery))
-      .then(() => setLoading(false))
-      .catch((error) => {
-        console.error("Error searching plants:", error);
-        setLoading(false);
-      });
+    dispatch(searchPlants(searchQuery)).catch((error) => {
+      console.error("Error searching plants:", error);
+    });
   };
 
   const refreshData = () => {
@@ -84,6 +79,13 @@ const Plants = () => {
           style={styles.activityIndicator}
           size="large"
           color="#000000"
+        />
+      ) : null}
+      {error ? (
+        <Error
+          errorMsg={error}
+          buttonTitle="Try Again"
+          handleClick={refreshData}
         />
       ) : null}
       <FlatList

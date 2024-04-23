@@ -4,15 +4,16 @@ import {
   Text,
   View,
   TextInput,
-  Button,
   ScrollView,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
   sendMessageToBot,
   fetchUserConversations,
 } from "../redux/actions/chatbot";
+import { Button } from "@rneui/themed";
 
 const ChatBot = () => {
   const dispatch = useDispatch();
@@ -102,7 +103,15 @@ const ChatBot = () => {
           onChangeText={setInputText}
           placeholder="Type your message..."
         />
-        <Button title="Send" onPress={handleMessageSend} />
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={handleMessageSend}
+        >
+          <Image
+            source={require("../../assets/send-mail.png")}
+            style={styles.sendIcon}
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -121,7 +130,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 20,
-    marginBottom: 6,
+    marginBottom: 15,
+    padding: 8,
   },
   input: {
     flex: 1,
@@ -170,6 +180,28 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     marginLeft: 5,
+  },
+  btnContainer: {
+    alignItems: "center",
+    marginVertical: 16,
+  },
+  buttonStyle: {
+    backgroundColor: "#00a86b",
+    // borderRadius: 16,
+    padding: 12,
+  },
+  buttonText: {
+    fontWeight: "700",
+    fontSize: 16,
+    color: "#ffff",
+  },
+  buttonContainer: {
+    // width: "20%",
+    // height: 50,
+  },
+  sendIcon: {
+    width: 30,
+    height: 30,
   },
 });
 

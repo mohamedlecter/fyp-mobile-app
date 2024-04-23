@@ -90,7 +90,7 @@ const CalendarPage = () => {
         <TouchableOpacity onPress={handleNavigateBack}>
           <Icon name="arrow-back-outline" size={25} />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Plantify</Text>
+        <Text style={styles.headerText}>Snap Leaf</Text>
         <Icon2 name="bookmark-o" size={25} />
       </View>
       <ScrollView

@@ -6,7 +6,7 @@ export default function Header() {
   return (
     <View style={styles.container}>
       <Icon name="notifications-outline" size={25} />
-      <Text style={styles.headerText}>Plantify</Text>
+      <Text style={styles.headerText}>Snap Leaf</Text>
       <Icon2 name="bookmark-o" size={25} />
     </View>
   );

@@ -18,6 +18,7 @@ const initialState = {
   addedPlant: null,
   disease: [],
   plant: null,
+  plantError: null,
 };
 
 const plantReducer = (state = initialState, { type, payload }) => {
@@ -27,28 +28,28 @@ const plantReducer = (state = initialState, { type, payload }) => {
         ...state,
         plants: payload,
         isLoading: false,
-        error: null,
+        plantError: null,
       };
     case GET_PLANTS_FAIL:
       return {
         ...state,
         plants: [],
         isLoading: false,
-        error: payload,
+        plantError: payload,
       };
     case SEARCH_PLANTS:
       return {
         ...state,
         plants: payload,
         isLoading: false,
-        error: null,
+        plantError: null,
       };
     case SEARCH_PLANTS_FAIL:
       return {
         ...state,
         plants: [],
         isLoading: false,
-        error: payload,
+        plantError: payload,
       };
     case ADD_PLANT:
       return {

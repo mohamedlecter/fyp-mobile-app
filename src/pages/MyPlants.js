@@ -12,6 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Header from "../components/Header";
 import { fetchUserPlants } from "../redux/actions/users";
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation hook
+import Error from "../components/Error";
 
 const MyPlants = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,10 @@ const MyPlants = () => {
     navigation.navigate("MyPlant", { plantId }); // Navigate to MyPlant screen with plantId as parameter
   };
 
+  const navigateToPlantsPage = () => {
+    navigation.navigate("PlantsTab"); // Navigate to Plants Tab
+  };
+
   return (
     <View style={styles.container}>
       <Header title="My Plants" />
@@ -46,7 +51,21 @@ const MyPlants = () => {
         }
         showsVerticalScrollIndicator={false}
       >
-        {error && <Text>Error: {error}</Text>}
+        {error && (
+          <Error
+            errorMsg={error}
+            buttonTitle="Try Again"
+            handleClick={onRefresh}
+          />
+        )}
+        {plants && plants.length === 0 && (
+          <Error
+            errorMsg="No plants added yet"
+            buttonTitle="Add Plant"
+            handleClick={navigateToPlantsPage}
+          />
+        )}
+
         {plants &&
           plants.map((plant, index) => (
             <TouchableOpacity

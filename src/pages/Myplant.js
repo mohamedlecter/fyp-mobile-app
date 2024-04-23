@@ -14,6 +14,7 @@ import Header from "../components/Header";
 import { fetchUserPlant, saveCareReminder } from "../redux/actions/users";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Icon from "react-native-vector-icons/AntDesign";
+import Error from "../components/Error";
 
 const options = [
   { text: "Water", icon: require("../../assets/water.png") },
@@ -143,7 +144,13 @@ const Myplant = ({ route }) => {
         }
         showsVerticalScrollIndicator={false}
       >
-        {error && <Text style={styles.errorText}>Error: {error}</Text>}
+        {error && (
+          <Error
+            errorMsg={error}
+            buttonTitle="Try Again"
+            handleClick={onRefresh}
+          />
+        )}
         {plant && (
           <View style={styles.plantContainer}>
             <View style={styles.imageContainer}>
@@ -277,6 +284,25 @@ const styles = StyleSheet.create({
   optionNameAndIcon: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  noPlantContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
+  },
+  noPlantText: {
+    fontSize: 20,
+    textAlign: "center",
+    marginTop: 20,
+    fontWeight: "bold",
+    color: "#555",
+  },
+  noPlantImage: {
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
+    marginBottom: 20,
   },
 });
 
