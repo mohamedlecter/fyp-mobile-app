@@ -6,6 +6,7 @@ import {
   TextInput,
   Button,
   ScrollView,
+  Image,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -19,7 +20,9 @@ const ChatBot = () => {
   const conversations = useSelector(
     (state) => state.chatBotReducer.conversations
   );
-  const isLoading = useSelector((state) => state.chatBotReducer.isLoading);
+  const isUserMessageLoading = useSelector(
+    (state) => state.chatBotReducer.isUserMessageLoading
+  );
   const isBotLoading = useSelector(
     (state) => state.chatBotReducer.isBotLoading
   );
@@ -54,31 +57,43 @@ const ChatBot = () => {
         style={styles.chatContainer}
         contentContainerStyle={styles.chatContentContainer}
       >
-        {isLoading ? (
-          <Text>Loading...</Text>
-        ) : error ? (
-          <Text>Error: {error}</Text>
-        ) : (
-          conversations.map((conversation, index) => (
-            <View key={index}>
-              <Text>Conversation ID: {conversation.conversation_id}</Text>
-              <View>
-                {conversation.conversation_history.map((message, index) => (
-                  <Text
-                    key={index}
-                    style={
-                      message.role === "user"
-                        ? styles.userMessageText
-                        : styles.botMessageText
-                    }
-                  >
-                    {message.content}
-                  </Text>
-                ))}
-              </View>
+        {conversations.map((conversation, index) => (
+          <View key={index}>
+            <View>
+              {conversation.conversation_history.map((message, index) =>
+                message.role === "user" ? (
+                  <View key={index} style={styles.userMessageContainer}>
+                    {isUserMessageLoading ? (
+                      <Text style={styles.userMessageText}>Loading...</Text>
+                    ) : (
+                      <Text style={styles.userMessageText}>
+                        {message.content}
+                      </Text>
+                    )}
+                    <Image
+                      style={styles.userImage}
+                      source={require("../../assets/selfie.png")}
+                    />
+                  </View>
+                ) : (
+                  <View key={index} style={styles.botMessageContainer}>
+                    <Image
+                      style={styles.botImage}
+                      source={require("../../assets/bot.png")}
+                    />
+                    {isBotLoading ? (
+                      <Text style={styles.botMessageText}>Loading...</Text>
+                    ) : (
+                      <Text style={styles.botMessageText}>
+                        {message.content}
+                      </Text>
+                    )}
+                  </View>
+                )
+              )}
             </View>
-          ))
-        )}
+          </View>
+        ))}
       </ScrollView>
       <View style={styles.inputContainer}>
         <TextInput
@@ -96,19 +111,17 @@ const ChatBot = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
     justifyContent: "center",
+    paddingTop: 60,
   },
   chatContainer: {
     flex: 1,
   },
-  chatContentContainer: {
-    paddingBottom: 20, // Adjust as per your UI needs
-  },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 16,
+    marginTop: 20,
+    marginBottom: 6,
   },
   input: {
     flex: 1,
@@ -118,13 +131,45 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 8,
   },
+  userMessageContainer: {
+    padding: 8,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  botMessageContainer: {
+    padding: 8,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
+  userImage: {
+    height: 30,
+    width: 30,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  botImage: {
+    height: 30,
+    width: 30,
+    borderRadius: 25,
+    marginRight: 10,
+  },
   userMessageText: {
-    color: "#000",
-    alignSelf: "flex-end",
+    color: "white",
+    maxWidth: "90%",
+    backgroundColor: "#00a86b",
+    padding: 10,
+    borderRadius: 10,
+    marginRight: 5,
   },
   botMessageText: {
     color: "#333",
-    alignSelf: "flex-start",
+    maxWidth: "85%",
+    backgroundColor: "#ebeaed",
+    padding: 10,
+    borderRadius: 10,
+    marginLeft: 5,
   },
 });
 

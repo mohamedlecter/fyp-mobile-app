@@ -14,6 +14,7 @@ const initialState = {
   isLoading: true,
   error: null,
   isBotLoading: false,
+  isUserMessageLoading: false,
 };
 
 const chatBotReducer = (state = initialState, { type, payload }) => {
@@ -23,6 +24,7 @@ const chatBotReducer = (state = initialState, { type, payload }) => {
         ...state,
         messages: [...state.messages, payload],
         isBotLoading: true,
+        isUserMessageLoading: true,
         error: null,
       };
     case SEND_MESSAGE_TO_BOT_FAIL:
@@ -38,6 +40,7 @@ const chatBotReducer = (state = initialState, { type, payload }) => {
         messages: [...state.messages, payload],
         isLoading: false,
         isBotLoading: false,
+        isUserMessageLoading: false,
         error: null,
       };
     case RECEIVE_RESPONSE_FROM_BOT_FAIL:
