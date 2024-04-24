@@ -11,3 +11,6 @@ export const ADD_PLANT_FAIL = "ADD_PLANT_FAIL";
 
 export const GET_DISEASE = "GET_DISEASE";
 export const GET_DISEASE_FAIL = "GET_DISEASE_FAIL";
+
+export const DELETE_PLANT = "DELETE_PLANT";
+export const DELETE_PLANT_FAIL = "DELETE_PLANT_FAIL";

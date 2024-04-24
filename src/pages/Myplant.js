@@ -10,11 +10,15 @@ import {
   Switch as ReactSwitch,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import Header from "../components/Header";
 import { fetchUserPlant, saveCareReminder } from "../redux/actions/users";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/AntDesign";
 import Error from "../components/Error";
+import HeaderBack from "../components/HeaderBack";
+import Icon2 from "react-native-vector-icons/Ionicons";
+import Icon3 from "react-native-vector-icons/MaterialCommunityIcons";
+import { deletePlant } from "../redux/actions/plants";
 
 const options = [
   { text: "Water", icon: require("../../assets/water.png") },
@@ -29,6 +33,7 @@ const Myplant = ({ route }) => {
   const plant = useSelector((state) => state.userReducer.userPlant);
   const error = useSelector((state) => state.userReducer.error);
   const [refreshing, setRefreshing] = useState(false);
+  const navigation = useNavigation();
   const { plantId } = route.params;
 
   const [switchStates, setSwitchStates] = useState(options.map(() => false));
@@ -41,7 +46,6 @@ const Myplant = ({ route }) => {
     const fetchPlantData = async () => {
       try {
         const plantData = await dispatch(fetchUserPlant(userId, plantId));
-        console.log("Fetched user plant:", plantData);
 
         // Set the initial switch states based on care reminders
         if (plantData.care_reminders && plantData.care_reminders.length > 0) {
@@ -73,6 +77,18 @@ const Myplant = ({ route }) => {
     setRefreshing(true);
     await dispatch(fetchUserPlant(userId, plantId));
     setRefreshing(false);
+  };
+
+  const handleNavigateBack = () => {
+    navigation.goBack();
+  };
+
+  const handleDeletePlant = () => {
+    console.log("Deleting plant:", plantId);
+    dispatch(deletePlant(userId, plantId));
+    setTimeout(() => {
+      navigation.goBack();
+    }, 2000);
   };
 
   const renderExtendedView = (text, index) => {
@@ -136,7 +152,22 @@ const Myplant = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <Header title="My Plants" />
+      <View style={styles.headerContainer}>
+        <TouchableOpacity onPress={handleNavigateBack}>
+          <Icon2 name="arrow-back-outline" size={25} />
+        </TouchableOpacity>
+        <Text style={styles.headerText}>
+          {plant ? plant.title : "My Plant"}
+        </Text>
+
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={handleDeletePlant}
+        >
+          <Icon3 name="delete" size={25} color={"#e25d5d"} />
+        </TouchableOpacity>
+      </View>
+
       <ScrollView
         contentContainerStyle={styles.scrollView}
         refreshControl={
@@ -163,11 +194,6 @@ const Myplant = ({ route }) => {
                 style={styles.image}
               />
             </View>
-
-            <Text style={styles.plantName}>{plant.title}</Text>
-            <Text style={styles.plantDescription} numberOfLines={7}>
-              {plant.description}
-            </Text>
             <View style={styles.careOptionsContainer}>
               <Text style={styles.careOptionsTitle}>Care Options</Text>
               {options.map((option, index) => (
@@ -200,21 +226,40 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 16,
+    marginTop: 35,
+    justifyContent: "space-between",
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginLeft: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+  },
+  backButton: {
+    marginRight: "auto",
+  },
   scrollView: {
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: 10,
   },
   plantContainer: {
-    marginBottom: 20,
+    // marginBottom: 20,
   },
   imageContainer: {
     alignItems: "center",
   },
   image: {
-    width: 120,
-    height: 120,
+    width: "100%",
+    height: 180,
     borderRadius: 10,
     marginBottom: 10,
+    resizeMode: "stretch",
   },
   plantName: {
     fontSize: 18,
@@ -303,6 +348,11 @@ const styles = StyleSheet.create({
     height: 200,
     resizeMode: "contain",
     marginBottom: 20,
+  },
+  deleteIcon: {
+    width: 30,
+    height: 30,
+    resizeMode: "contain",
   },
 });
 

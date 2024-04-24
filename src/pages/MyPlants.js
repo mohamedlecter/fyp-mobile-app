@@ -25,7 +25,7 @@ const MyPlants = () => {
 
   useEffect(() => {
     dispatch(fetchUserPlants(userId)); // Fetch user's plants when component mounts
-  }, []);
+  }, [dispatch, plants]);
 
   const onRefresh = () => {
     setRefreshing(true);

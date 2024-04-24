@@ -9,6 +9,8 @@ import {
   ADD_PLANT_FAIL,
   GET_DISEASE,
   GET_DISEASE_FAIL,
+  DELETE_PLANT,
+  DELETE_PLANT_FAIL,
 } from "../constants/plants";
 
 const initialState = {
@@ -19,6 +21,7 @@ const initialState = {
   disease: [],
   plant: null,
   plantError: null,
+  deletedPlant: null,
 };
 
 const plantReducer = (state = initialState, { type, payload }) => {
@@ -91,6 +94,19 @@ const plantReducer = (state = initialState, { type, payload }) => {
         isLoading: false,
         error: payload,
       };
+    case DELETE_PLANT:
+      return {
+        ...state,
+        deletedPlant: payload,
+        error: null,
+      };
+    case DELETE_PLANT_FAIL:
+      return {
+        ...state,
+        deletedPlant: null,
+        error: payload,
+      };
+
     default:
       return state;
   }

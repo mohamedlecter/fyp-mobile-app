@@ -9,6 +9,8 @@ import {
   ADD_PLANT_FAIL,
   GET_DISEASE,
   GET_DISEASE_FAIL,
+  DELETE_PLANT,
+  DELETE_PLANT_FAIL,
 } from "../constants/plants";
 import axios from "axios";
 import API from "../../../api";
@@ -70,6 +72,31 @@ export const addPlant = (userId, plantId) => async (dispatch) => {
     dispatch({
       type: ADD_PLANT_FAIL,
       payload: error.response ? error.response.data.msg : "Failed to add plant",
+    });
+  }
+};
+export const deletePlant = (userId, plantId) => async (dispatch) => {
+  const requestData = {
+    user_id: userId,
+    plant_id: plantId,
+  };
+  console.log("Request data:", requestData);
+  try {
+    const response = await axios.delete(`${API}/user_plant/delete_plant`, {
+      data: requestData,
+    });
+
+    console.log("Delete plant response:", response.data);
+    dispatch({
+      type: DELETE_PLANT,
+      payload: response.data,
+    });
+  } catch (error) {
+    dispatch({
+      type: DELETE_PLANT_FAIL,
+      payload: error.response
+        ? error.response.data.msg
+        : "Failed to delete plant",
     });
   }
 };

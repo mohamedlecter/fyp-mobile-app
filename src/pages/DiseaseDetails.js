@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, ScrollView, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Button } from "@rneui/themed";
 import { PRIMARY_GREEN } from "../colors";
 import { useDispatch, useSelector } from "react-redux";
 import { getDisease } from "../redux/actions/plants";
+import HeaderBack from "../components/HeaderBack";
 
 const DiseaseDetails = ({ route }) => {
   const [loading, setLoading] = useState(true);
@@ -43,14 +43,7 @@ const DiseaseDetails = ({ route }) => {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <View style={styles.headerContainer}>
-        <Button
-          title="Back"
-          onPress={handleNavigateBack}
-          style={styles.backButton}
-        />
-        <Text style={styles.headerText}>Disease Details</Text>
-      </View>
+      <HeaderBack title="Disease Details" onPress={handleNavigateBack} />
 
       <View style={styles.detailsContainer}>
         <Text style={styles.label}>Name</Text>
@@ -102,19 +95,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  headerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 16,
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginLeft: 10,
-  },
-  backButton: {
-    marginRight: "auto",
   },
   detailsContainer: {
     paddingHorizontal: 20,

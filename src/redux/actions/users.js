@@ -167,7 +167,6 @@ export const deleteUser = (id) => async (dispatch) => {
 export const fetchUserPlants = (id) => async (dispatch) => {
   try {
     const res = await axios.get(`${API}/plant/user/${id}`);
-    console.log("User plants response:", res.data);
     if (res) {
       dispatch({
         type: FETCH_USER_PLANTS,

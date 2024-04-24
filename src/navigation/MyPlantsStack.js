@@ -13,11 +13,6 @@ const MyPlantsStack = () => {
         component={MyPlants}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name="MyPlant"
-        component={MyPlant}
-        options={{ headerShown: false }}
-      />
     </Stack.Navigator>
   );
 };
