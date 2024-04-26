@@ -24,11 +24,11 @@ const Plants = () => {
   const dispatch = useDispatch();
   const plants = useSelector((state) => state.plantReducer.plants);
   const error = useSelector((state) => state.plantReducer.plantError);
-  const loading = useSelector((state) => state.plantReducer.loading);
+  const loading = useSelector((state) => state.plantReducer.isLoading);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   const fetchData = () => {
     // Fetch all plants if search query is empty

@@ -51,7 +51,7 @@ const DiseaseDetails = ({ route }) => {
           {diseaseDetails[0].matching_disease.name}
         </Text>
 
-        <Image
+        {/* <Image
           source={{ uri: diseaseDetails[0].image }}
           style={{
             width: 200,
@@ -60,7 +60,7 @@ const DiseaseDetails = ({ route }) => {
             borderRadius: 10,
             marginBottom: 10,
           }}
-        />
+        /> */}
 
         <Text style={styles.label}>Category</Text>
         <Text style={styles.value}>

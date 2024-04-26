@@ -13,6 +13,7 @@ export default function SnapPlant() {
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
   const [permission, requestPermission] = Camera.useCameraPermissions();
+  const [confidence, setConfidence] = useState(0);
 
   useEffect(() => {
     // Request camera permissions when the component mounts
@@ -38,8 +39,52 @@ export default function SnapPlant() {
   // Function to handle uploading the image
   const uploadImage = async (imageUri) => {
     try {
-      setIsLoading(true);
-      // Perform image upload logic here
+      setIsLoading(true); // Set isLoading to true when starting the upload
+
+      const formData = new FormData();
+      formData.append("file", {
+        uri: imageUri,
+        name: "image.jpg",
+        type: "image/jpg",
+      });
+
+      const response = await fetch(
+        "https://us-central1-fyp-model-416403.cloudfunctions.net/predict",
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to upload image");
+      }
+
+      const data = await response.json();
+      console.log(data);
+      // Replace underscores with spaces in the disease name
+      const formattedDisease = data.class.replace(/_/g, " ");
+      console.log(formattedDisease);
+      setDisease(formattedDisease);
+      setConfidence(data.confidence);
+
+      console.log(data.confidence);
+      if (data.confidence > 0.5) {
+        console.log("confidence is greater than 0.5");
+        //navigateToDiseaseDetails(formattedDisease);
+      } else {
+        console.log("confidence is less than 0.5");
+        alert("Please retake the picture");
+        retakePicture();
+      }
+
+      // Navigate to the disease details page after 3 seconds
+      // setTimeout(() => {
+      // navigateToDiseaseDetails(data.class);
+      // }, 2000);
     } catch (error) {
       console.error("Error uploading image:", error);
     } finally {
@@ -54,13 +99,17 @@ export default function SnapPlant() {
   // Function to handle retaking a picture
   const retakePicture = () => {
     setPickedImagePath("");
+    setConfidence(0);
+    setDisease("");
   };
 
   // Function to handle submitting the picture
   const submitPicture = () => {
     if (pickedImagePath !== "") {
       console.log(pickedImagePath);
-      //uploadImage(pickedImagePath);
+      uploadImage(pickedImagePath);
+      setConfidence(0);
+      setDisease("");
     }
   };
 
@@ -121,8 +170,10 @@ export default function SnapPlant() {
       <View>
         {isLoading ? (
           <ActivityIndicator size="large" color="blue" />
-        ) : disease ? (
-          <Text>disease: {disease}</Text>
+        ) : disease && confidence ? (
+          <Text>
+            disease: {disease} with confidence of {confidence}
+          </Text>
         ) : null}
       </View>
     </View>
@@ -138,8 +189,10 @@ const styles = StyleSheet.create({
   },
   cameraContainer: {
     width: "100%",
-    aspectRatio: 0.6,
-    marginBottom: 10,
+    height: "100%",
+    resizeMode: "contain",
+    flex: 1,
+    marginBottom: 20,
   },
   camera: {
     flex: 1,
@@ -147,11 +200,14 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: "100%",
     alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
   },
   image: {
     width: "100%",
-    aspectRatio: 0.6,
-    resizeMode: "cover",
+    height: "100%",
+    resizeMode: "contain",
+    flex: 1,
   },
   buttonContainer: {
     alignItems: "center",

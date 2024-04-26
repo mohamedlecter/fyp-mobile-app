@@ -80,7 +80,24 @@ const PlantDetails = ({ route }) => {
       </View>
 
       <View style={styles.detailsContainer}>
-        <Text style={styles.title}>{plantDetails.title}</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Text style={styles.title}>{plantDetails.title}</Text>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={addPlantToUser}>
+              <Image
+                source={require("../../assets/leaf.png")}
+                style={styles.leafIcon}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+
         <View style={styles.infoContainer}>
           <Text style={styles.label}>Common Name:</Text>
           <Text style={styles.value}>{plantDetails.common_name}</Text>
@@ -91,8 +108,12 @@ const PlantDetails = ({ route }) => {
         </View>
       </View>
 
-      <View style={styles.tabContainer}>
-        {["Overview", "Uses & Benefits", "Propagation", "Diseases"].map(
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.tabContainer}
+      >
+        {["Overview", "Diseases", "Propagation", "Uses & Benefits"].map(
           (item) => (
             <TouchableOpacity
               key={item}
@@ -113,7 +134,7 @@ const PlantDetails = ({ route }) => {
             </TouchableOpacity>
           )
         )}
-      </View>
+      </ScrollView>
 
       {selectedItem === "Overview" && (
         <View style={styles.descriptionContainer}>
@@ -123,14 +144,6 @@ const PlantDetails = ({ route }) => {
           </Text>
         </View>
       )}
-
-      {selectedItem === "Uses & Benefits" && (
-        <View style={styles.descriptionContainer}>
-          <Text style={styles.heading}>Uses & Benefits</Text>
-          <Text style={styles.description}>{plantDetails.uses}</Text>
-        </View>
-      )}
-
       {selectedItem === "Propagation" && (
         <View style={styles.descriptionContainer}>
           <Text style={styles.heading}>Propagation</Text>
@@ -144,6 +157,13 @@ const PlantDetails = ({ route }) => {
           <Text style={styles.description}>{plantDetails.care}</Text>
           <Text style={styles.subHeading}>Harvesting</Text>
           <Text style={styles.description}>{plantDetails.harvesting}</Text>
+        </View>
+      )}
+
+      {selectedItem === "Uses & Benefits" && (
+        <View style={styles.descriptionContainer}>
+          <Text style={styles.heading}>Uses & Benefits</Text>
+          <Text style={styles.description}>{plantDetails.uses}</Text>
         </View>
       )}
 
@@ -167,15 +187,6 @@ const PlantDetails = ({ route }) => {
           ))}
         </View>
       )}
-
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Add Plant"
-          buttonStyle={styles.addButtonStyle}
-          titleStyle={styles.addButtonTitle}
-          onPress={addPlantToUser}
-        />
-      </View>
     </ScrollView>
   );
 };
@@ -237,12 +248,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   tabItem: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
     borderRadius: 20,
     borderWidth: 1,
     borderColor: "#ccc",
-    marginRight: 10,
+    marginRight: 5,
   },
   selectedTabItem: {
     backgroundColor: PRIMARY_GREEN,
@@ -276,18 +287,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonContainer: {
+    borderRadius: 25,
+    backgroundColor: "#ffd743",
+    padding: 7,
     alignItems: "center",
-    marginVertical: 20,
+    justifyContent: "center",
   },
-  addButtonStyle: {
-    backgroundColor: PRIMARY_GREEN,
-    borderRadius: 20,
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-  },
-  addButtonTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
+  leafIcon: {
+    height: 28,
+    width: 28,
+    tintColor: "#fff",
   },
 });
 

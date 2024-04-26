@@ -29,14 +29,11 @@ import axios from "axios";
 import API from "../../../api";
 
 export const login = (email, password) => async (dispatch) => {
-  console.log("Request data:", { email, password });
   try {
     const res = await axios.post(`${API}/user/login`, {
       email,
       password,
     });
-
-    console.log("Response after post data:", res.data);
 
     dispatch({
       type: LOGIN_SUCCESS,
