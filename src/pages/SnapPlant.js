@@ -8,25 +8,18 @@ import { useNavigation } from "@react-navigation/native";
 export default function SnapPlant() {
   const [pickedImagePath, setPickedImagePath] = useState("");
   const [camera, setCamera] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
   const [disease, setDisease] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [confidence, setConfidence] = useState(0);
+  const [showOptionsContainer, setShowOptionsContainer] = useState(true);
+  const [showCameraContainer, setShowCameraContainer] = useState(false);
 
   useEffect(() => {
     // Request camera permissions when the component mounts
     requestPermission();
   }, []);
-
-  // Function to handle taking a picture
-  const takePicture = async () => {
-    if (camera) {
-      const data = await camera.takePictureAsync(null);
-      setPickedImagePath(data.uri);
-    }
-  };
 
   // Function to handle selecting an image from the gallery
   const pickImage = async () => {
@@ -34,6 +27,14 @@ export default function SnapPlant() {
     if (!result.cancelled) {
       setPickedImagePath(result.uri);
     }
+    setShowOptionsContainer(false);
+    setShowCameraContainer(false);
+  };
+
+  // Function to handle taking a picture
+  const takePicture = async () => {
+    setShowOptionsContainer(false);
+    setShowCameraContainer(true);
   };
 
   // Function to handle submitting the picture
@@ -87,6 +88,7 @@ export default function SnapPlant() {
       setIsLoading(false);
     }
   };
+
   // Function to navigate to the disease details page
   const navigateToDiseaseDetails = (diseaseName, confidence, imageUri) => {
     navigation.navigate("DiseaseDetails", {
@@ -98,6 +100,7 @@ export default function SnapPlant() {
 
   // Function to handle retaking a picture
   const retakePicture = () => {
+    setShowOptionsContainer(true);
     setPickedImagePath("");
     setConfidence(0);
     setDisease("");
@@ -105,117 +108,168 @@ export default function SnapPlant() {
 
   return (
     <View style={styles.screen}>
-      <View style={styles.cameraContainer}>
-        <>
-          {pickedImagePath === "" ? (
-            <Camera
-              style={styles.camera}
-              type={type}
-              ref={(ref) => setCamera(ref)}
-            />
-          ) : (
-            <View style={styles.imageContainer}>
-              <Image source={{ uri: pickedImagePath }} style={styles.image} />
-            </View>
-          )}
-        </>
-      </View>
-
-      <View style={{ marginBottom: 2 }}>
-        <View style={styles.buttonContainer}>
-          <Button
-            onPress={pickImage}
-            title="Select an image"
-            buttonStyle={styles.buttonStyle}
-            titleStyle={styles.buttonTitle}
-          />
-          <Button
-            title="Take Picture"
-            onPress={takePicture}
-            buttonStyle={styles.buttonStyle}
-            titleStyle={styles.buttonTitle}
-          />
-        </View>
-
-        <View style={styles.buttonContainer}>
-          {pickedImagePath !== "" && (
+      {showOptionsContainer && (
+        <View style={styles.optionsContainer}>
+          <Text style={styles.text}>Identify</Text>
+          <View style={styles.buttonContainer}>
             <Button
-              title="Retake Picture"
-              onPress={retakePicture}
-              titleStyle={styles.buttonTitle}
+              onPress={pickImage}
+              title="Select an image"
               buttonStyle={styles.buttonStyle}
-            />
-          )}
-          {pickedImagePath !== "" && (
-            <Button
-              title="Submit Picture"
-              onPress={submitPicture}
               titleStyle={styles.buttonTitle}
-              buttonStyle={[styles.buttonStyle, { backgroundColor: "#4951f5" }]}
             />
-          )}
+          </View>
+          <View style={styles.buttonContainer}>
+            <Button
+              title="Take Picture"
+              onPress={takePicture}
+              buttonStyle={styles.buttonStyle}
+              titleStyle={styles.buttonTitle}
+            />
+          </View>
         </View>
-      </View>
-
-      <View>
-        {isLoading ? (
-          <ActivityIndicator size="large" color="blue" />
-        ) : disease && confidence ? (
-          <Text>
-            disease: {disease} with confidence of {confidence}
-          </Text>
-        ) : null}
-      </View>
+      )}
+      {showCameraContainer && (
+        <CameraContainer
+          takePicture={takePicture}
+          setPickedImagePath={setPickedImagePath}
+          setShowCameraContainer={setShowCameraContainer}
+        />
+      )}
+      {pickedImagePath !== "" && (
+        <View style={styles.imageContainer}>
+          <Image
+            source={{ uri: pickedImagePath }}
+            style={{ width: "100%", height: 450 }}
+          />
+          <View style={styles.rowButtonContainer}>
+            <Button
+              onPress={retakePicture}
+              title="Retake Picture"
+              buttonStyle={[
+                styles.buttonStyle,
+                { borderRadius: 5, marginHorizontal: 10, marginTop: 10 },
+              ]}
+              titleStyle={styles.buttonTitle}
+            />
+            <Button
+              onPress={submitPicture}
+              title="Submit"
+              buttonStyle={[
+                styles.buttonStyle,
+                { backgroundColor: "blue", borderRadius: 5, marginTop: 10 },
+              ]}
+              titleStyle={styles.buttonTitle}
+            />
+          </View>
+          {isLoading && <ActivityIndicator size="large" color="#00a86b" />}
+        </View>
+      )}
     </View>
   );
 }
 
+const CameraContainer = ({
+  takePicture,
+  setPickedImagePath,
+  setShowCameraContainer,
+}) => {
+  const [camera, setCamera] = useState(null);
+
+  return (
+    <View style={styles.cameraContainer}>
+      <Camera
+        style={styles.camera}
+        type={Camera.Constants.Type.back}
+        ref={(ref) => setCamera(ref)}
+      >
+        <View style={styles.buttonContainer}>
+          <Button
+            onPress={async () => {
+              if (camera) {
+                const data = await camera.takePictureAsync(null);
+                setPickedImagePath(data.uri);
+                setShowCameraContainer(false);
+              }
+            }}
+            title="Take Picture"
+            buttonStyle={styles.buttonStyle}
+            titleStyle={styles.buttonTitle}
+          />
+        </View>
+      </Camera>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    justifyContent: "flex-end", // Align items at the bottom
+  },
+  optionsContainer: {
     justifyContent: "center",
     alignItems: "center",
-    paddingBottom: 30,
+    backgroundColor: "white",
+    shadowColor: "#000",
+    height: 180,
+    width: "100%",
+    position: "absolute", // Position absolute to cover bottom
+    bottom: 0, // Align to bottom
+    borderTopRightRadius: 30,
+    borderTopLeftRadius: 30,
   },
   cameraContainer: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
     flex: 1,
-    marginBottom: 20,
+    backgroundColor: "black",
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
   camera: {
     flex: 1,
-  },
-  imageContainer: {
-    width: "100%",
+    aspectRatio: 1,
+    justifyContent: "flex-end",
     alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
-  },
-  image: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
-    flex: 1,
   },
   buttonContainer: {
     alignItems: "center",
     flexDirection: "row",
-    justifyContent: "space-evenly",
-    width: "100%",
-    marginBottom: 5,
+    justifyContent: "center",
+    marginBottom: 20,
+  },
+  rowButtonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 20,
   },
   buttonStyle: {
     backgroundColor: "#00a86b",
-    borderRadius: 5,
-    paddingVertical: 5,
-    paddingHorizontal: 16,
+    borderRadius: 10,
+    width: 150,
+    height: 40,
   },
   buttonTitle: {
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "center",
     alignItems: "center",
+  },
+  rowButtonStyle: {
+    backgroundColor: "#00a86b",
+    borderRadius: 10,
+    width: 150,
+    height: 40,
+  },
+
+  text: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  imageContainer: {
+    alignItems: "center",
+    marginBottom: 20,
+    justifyContent: "center",
+    flex: 1,
   },
 });
