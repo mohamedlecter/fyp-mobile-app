@@ -36,6 +36,8 @@ const CalendarPlantDetails = ({ userId, date }) => {
       await dispatch(
         updateReminderCompletion(userId, plantId, action, newStatus)
       );
+      // Refetch plant details after updating completion status
+      await dispatch(fetchUserReminderDatesByDate(userId, date));
     } catch (error) {
       console.error("Error updating reminder completion:", error);
     }

@@ -41,6 +41,9 @@ const Myplant = ({ route }) => {
     options.map(() => new Date())
   );
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showDatePickers, setShowDatePickers] = useState(
+    options.map(() => false)
+  );
 
   useEffect(() => {
     const fetchPlantData = async () => {
@@ -96,11 +99,11 @@ const Myplant = ({ route }) => {
       return (
         <View style={styles.extendedView}>
           <DateTimePickerModal
-            isVisible={showDatePicker}
+            isVisible={showDatePickers[index]}
             mode="datetime"
             date={selectedDates[index]}
             onConfirm={(date) => handleDateConfirm(date, index)}
-            onCancel={toggleDatePicker}
+            onCancel={() => toggleDatePicker(index)} // Adjust onCancel to handle individual options
           />
           <TouchableOpacity
             onPress={() => toggleDatePicker(index)}
@@ -123,7 +126,9 @@ const Myplant = ({ route }) => {
   };
 
   const toggleDatePicker = (index) => {
-    setShowDatePicker((prevState) => !prevState);
+    const updatedShowDatePickers = [...showDatePickers];
+    updatedShowDatePickers[index] = !updatedShowDatePickers[index];
+    setShowDatePickers(updatedShowDatePickers);
   };
 
   const handleDateConfirm = (date, index) => {
@@ -141,9 +146,8 @@ const Myplant = ({ route }) => {
     dispatch(saveCareReminder(userId, plantId, action, time));
     setShowDatePicker(false);
   };
-
   const toggleSwitch = (index) => {
-    if (!showDatePicker) {
+    if (!showDatePickers[index]) {
       const updatedSwitchStates = [...switchStates];
       updatedSwitchStates[index] = !updatedSwitchStates[index];
       setSwitchStates(updatedSwitchStates);

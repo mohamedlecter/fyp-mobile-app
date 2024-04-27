@@ -36,6 +36,15 @@ export default function SnapPlant() {
     }
   };
 
+  // Function to handle submitting the picture
+  const submitPicture = () => {
+    if (pickedImagePath !== "") {
+      console.log(pickedImagePath);
+      uploadImage(pickedImagePath);
+      setConfidence(0);
+      setDisease("");
+    }
+  };
   // Function to handle uploading the image
   const uploadImage = async (imageUri) => {
     try {
@@ -65,26 +74,13 @@ export default function SnapPlant() {
 
       const data = await response.json();
       console.log(data);
-      // Replace underscores with spaces in the disease name
-      const formattedDisease = data.class.replace(/_/g, " ");
-      console.log(formattedDisease);
-      setDisease(formattedDisease);
+      setDisease(data.class);
       setConfidence(data.confidence);
 
-      console.log(data.confidence);
-      if (data.confidence > 0.5) {
-        console.log("confidence is greater than 0.5");
-        //navigateToDiseaseDetails(formattedDisease);
-      } else {
-        console.log("confidence is less than 0.5");
-        alert("Please retake the picture");
-        retakePicture();
-      }
-
       // Navigate to the disease details page after 3 seconds
-      // setTimeout(() => {
-      // navigateToDiseaseDetails(data.class);
-      // }, 2000);
+      setTimeout(() => {
+        navigateToDiseaseDetails(data.class, data.confidence, imageUri);
+      }, 2000);
     } catch (error) {
       console.error("Error uploading image:", error);
     } finally {
@@ -92,8 +88,12 @@ export default function SnapPlant() {
     }
   };
   // Function to navigate to the disease details page
-  const navigateToDiseaseDetails = (diseaseName) => {
-    navigation.navigate("DiseaseDetails", { diseaseName });
+  const navigateToDiseaseDetails = (diseaseName, confidence, imageUri) => {
+    navigation.navigate("DiseaseDetails", {
+      diseaseName,
+      confidence,
+      imageUri,
+    });
   };
 
   // Function to handle retaking a picture
@@ -101,16 +101,6 @@ export default function SnapPlant() {
     setPickedImagePath("");
     setConfidence(0);
     setDisease("");
-  };
-
-  // Function to handle submitting the picture
-  const submitPicture = () => {
-    if (pickedImagePath !== "") {
-      console.log(pickedImagePath);
-      uploadImage(pickedImagePath);
-      setConfidence(0);
-      setDisease("");
-    }
   };
 
   return (

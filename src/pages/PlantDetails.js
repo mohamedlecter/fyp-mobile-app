@@ -80,16 +80,14 @@ const PlantDetails = ({ route }) => {
       </View>
 
       <View style={styles.detailsContainer}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
+        <View style={styles.rowContainer}>
           <Text style={styles.title}>{plantDetails.title}</Text>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={addPlantToUser}>
+            <TouchableOpacity
+              onPress={addPlantToUser}
+              style={styles.buttonContainer}
+            >
+              <Text style={styles.addText}>Add to My Plants</Text>
               <Image
                 source={require("../../assets/leaf.png")}
                 style={styles.leafIcon}
@@ -230,6 +228,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
+    alignItems: "center",
+    textAlign: "center",
   },
   infoContainer: {
     flexDirection: "row",
@@ -287,16 +287,29 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonContainer: {
-    borderRadius: 25,
-    backgroundColor: "#ffd743",
-    padding: 7,
+    borderRadius: 10,
+    backgroundColor: "#00a86b",
     alignItems: "center",
-    justifyContent: "center",
+    padding: 3,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   leafIcon: {
-    height: 28,
-    width: 28,
+    height: 20,
+    width: 20,
     tintColor: "#fff",
+  },
+  rowContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  addText: {
+    color: "#fff",
+    fontWeight: "bold",
+    marginRight: 5,
   },
 });
 

@@ -10,7 +10,7 @@ const DiseaseDetails = ({ route }) => {
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState("Overview");
   const navigation = useNavigation();
-  const { diseaseName } = route.params;
+  const { diseaseName, confidence, imageUri } = route.params;
   const dispatch = useDispatch();
   const diseaseDetails = useSelector((state) => state.plantReducer.disease);
 
@@ -39,48 +39,45 @@ const DiseaseDetails = ({ route }) => {
     );
   }
 
-  console.log("Disease details:", diseaseDetails[0].matching_disease.category);
+  const disease = diseaseDetails[0].found_diseases[0];
+  const formattedDisease = disease.name.replace(/_/g, " ");
+  const formattedConfidence = confidence.toString().slice(0, 5);
+
+  const otherDiseases = diseaseDetails[0].other_diseases;
+
+  console.log("Disease", otherDiseases);
+
+  console.log("image", imageUri);
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <HeaderBack title="Disease Details" onPress={handleNavigateBack} />
+      <HeaderBack title="Predicted Disease" onPress={handleNavigateBack} />
 
       <View style={styles.detailsContainer}>
-        <Text style={styles.label}>Name</Text>
-        <Text style={styles.value}>
-          {diseaseDetails[0].matching_disease.name}
+        <Image
+          source={{ uri: imageUri }}
+          style={{ width: "100%", height: 200 }}
+        />
+        <Text style={styles.label}>
+          Predicted Disease: {formattedDisease} with confidence of{" "}
+          {formattedConfidence}
         </Text>
+        <Text style={styles.value}>{formattedDisease}</Text>
 
-        {/* <Image
-          source={{ uri: diseaseDetails[0].image }}
-          style={{
-            width: 200,
-            height: 200,
-            resizeMode: "cover",
-            borderRadius: 10,
-            marginBottom: 10,
-          }}
-        /> */}
+        <Text style={styles.label}>Category:</Text>
+        <Text style={styles.value}>{disease.category}</Text>
 
-        <Text style={styles.label}>Category</Text>
-        <Text style={styles.value}>
-          {diseaseDetails[0].matching_disease.category}
-        </Text>
+        <Text style={styles.label}>Cause:</Text>
+        <Text style={styles.value}>{disease.cause}</Text>
 
-        <Text style={styles.label}>Symptoms</Text>
-        <Text style={styles.value}>
-          {diseaseDetails[0].matching_disease.symptoms}
-        </Text>
+        <Text style={styles.label}>Symptoms:</Text>
+        <Text style={styles.value}>{disease.symptoms}</Text>
 
-        <Text style={styles.label}>Treatment</Text>
-        <Text style={styles.value}>
-          {diseaseDetails[0].matching_disease.treatment}
-        </Text>
+        <Text style={styles.label}>Treatment:</Text>
+        <Text style={styles.value}>{disease.treatment}</Text>
 
-        <Text style={styles.label}>Treatment</Text>
-        <Text style={styles.value}>
-          {diseaseDetails[0].matching_disease.treatment}
-        </Text>
+        <Text style={styles.label}>Comments:</Text>
+        <Text style={styles.value}>{disease.comments}</Text>
       </View>
     </ScrollView>
   );
