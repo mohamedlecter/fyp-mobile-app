@@ -18,13 +18,13 @@ export default function Home() {
         <TouchableOpacity
           activeOpacity={0.6}
           style={styles.tabContainer}
-          onPress={() => navigateToScreen("SnapPlant")}
+          onPress={() => navigateToScreen("SnapPlantTab")}
         >
           <Image
             source={require("../../assets/camera(2).png")}
             style={styles.image}
           />
-          <Text style={styles.heading2}>Tab to Diagnose your plant</Text>
+          <Text style={styles.heading2}>Tap to Diagnose your plant</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -36,7 +36,7 @@ export default function Home() {
             source={require("../../assets/bot.png")}
             style={styles.image}
           />
-          <Text style={styles.heading2}>Tab to Ask Plant Bot</Text>
+          <Text style={styles.heading2}>Tap to Ask Plant Bot</Text>
         </TouchableOpacity>
       </View>
 
@@ -50,7 +50,7 @@ export default function Home() {
             source={require("../../assets/botanic.png")}
             style={styles.image}
           />
-          <Text style={styles.heading2}>Tab to Learn more about plants</Text>
+          <Text style={styles.heading2}>Tap to Learn more about plants</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -62,7 +62,7 @@ export default function Home() {
             source={require("../../assets/calendar.png")}
             style={styles.image}
           />
-          <Text style={styles.heading2}>Tab to check your care calendar</Text>
+          <Text style={styles.heading2}>Tap to check your care calendar</Text>
         </TouchableOpacity>
       </View>
     </View>

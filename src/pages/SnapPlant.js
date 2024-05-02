@@ -74,13 +74,15 @@ export default function SnapPlant() {
       }
 
       const data = await response.json();
-      console.log(data);
+      const confidencePercentage = (data.confidence * 100).toString().slice(0, 5);
       setDisease(data.class);
-      setConfidence(data.confidence);
+      setConfidence(confidencePercentage);
+      console.log(confidencePercentage);
+      console.log(data.class);
 
       // Navigate to the disease details page after 3 seconds
       setTimeout(() => {
-        navigateToDiseaseDetails(data.class, data.confidence, imageUri);
+        data.confidence > 0.5 ? navigateToDiseaseDetails(data.class, data.confidence, imageUri) : navigation.navigate("NoDisease")
       }, 2000);
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -97,6 +99,8 @@ export default function SnapPlant() {
       imageUri,
     });
   };
+
+  console.log(confidence)
 
   // Function to handle retaking a picture
   const retakePicture = () => {
@@ -140,7 +144,7 @@ export default function SnapPlant() {
         <View style={styles.imageContainer}>
           <Image
             source={{ uri: pickedImagePath }}
-            style={{ width: "100%", height: 450 }}
+            style={{ width: "100%", height: 450, resizeMode: "stretch" }}
           />
           <View style={styles.rowButtonContainer}>
             <Button

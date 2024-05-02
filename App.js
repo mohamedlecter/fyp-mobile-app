@@ -13,6 +13,7 @@ import MyPlantsStack from "./src/navigation/MyPlantsStack";
 import ChatBot from "./src/pages/ChatBot";
 import Myplant from "./src/pages/Myplant";
 import SnapPlant from "./src/pages/SnapPlant";
+import NoDisease from "./src/pages/NoDisease";
 
 const Stack = createStackNavigator();
 
@@ -30,6 +31,7 @@ const App = () => {
           <Stack.Screen name="MyPlantsTab" component={MyPlantsStack} />
           <Stack.Screen name="MyPlant" component={Myplant} />
           <Stack.Screen name="ChatBotTab" component={ChatBot} />
+          <Stack.Screen name="NoDisease" component={NoDisease} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

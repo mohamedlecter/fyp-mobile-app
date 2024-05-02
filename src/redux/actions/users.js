@@ -61,7 +61,7 @@ export const signUp = (email, password, username) => async (dispatch) => {
       username,
     });
 
-    console.log(data);
+    console.log(data.data);
 
     dispatch({
       type: SIGNUP_SUCCESS,

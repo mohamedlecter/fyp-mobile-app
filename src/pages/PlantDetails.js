@@ -59,14 +59,6 @@ const PlantDetails = ({ route }) => {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={handleNavigateBack}>
-          <Icon name="arrow-back-outline" size={25} />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Snap Leaf</Text>
-        <Icon2 name="bookmark-o" size={25} />
-      </View>
-
       <View style={styles.imageContainer}>
         <Image
           source={
@@ -77,6 +69,12 @@ const PlantDetails = ({ route }) => {
           style={styles.image}
           loadingIndicatorSource={require("../../assets/loading.gif")}
         />
+        <TouchableOpacity
+          style={styles.backIconContainer}
+          onPress={handleNavigateBack}
+        >
+          <Icon name="arrow-back-outline" size={20} style={styles.backIcon} />
+        </TouchableOpacity>
       </View>
 
       <View style={styles.detailsContainer}>
@@ -149,12 +147,12 @@ const PlantDetails = ({ route }) => {
           <Text style={styles.description}>
             {plantDetails.basic_requirements}
           </Text>
-          <Text style={styles.subHeading}>Growing from Seed</Text>
-          <Text style={styles.description}>{plantDetails.growing}</Text>
           <Text style={styles.subHeading}>General Care and Maintenance</Text>
           <Text style={styles.description}>{plantDetails.care}</Text>
           <Text style={styles.subHeading}>Harvesting</Text>
           <Text style={styles.description}>{plantDetails.harvesting}</Text>
+          <Text style={styles.subHeading}>Growing from Seed</Text>
+          <Text style={styles.description}>{plantDetails.growing}</Text>
         </View>
       )}
 
@@ -170,7 +168,9 @@ const PlantDetails = ({ route }) => {
           <Text style={styles.heading}>Diseases</Text>
           {plantDetails.diseases.map((disease, index) => (
             <View key={index}>
-              <Text style={styles.subHeading}>{disease.name}</Text>
+              <Text style={styles.subHeading}>
+                {disease.name && disease.name.replace(/_/g, " ")}
+              </Text>
               <Text style={styles.description}>
                 Category: {disease.category}
               </Text>
@@ -212,22 +212,35 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 10,
   },
   image: {
-    width: 380,
-    height: 200,
-    borderRadius: 10,
+    width: "100%",
+    height: 300,
     resizeMode: "stretch",
   },
+  backIconContainer: {
+    position: "absolute",
+    top: 40,
+    left: 10,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    width: 40,
+    height: 40,
+    borderRadius: 35,
+  },
+  backIcon: {
+    margin: 10,
+    color: "white",
+  },
   detailsContainer: {
-    marginBottom: 20,
+    marginBottom: 10,
     paddingHorizontal: 20,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 10,
     alignItems: "center",
     textAlign: "center",
   },
@@ -304,7 +317,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 20,
   },
   addText: {
     color: "#fff",

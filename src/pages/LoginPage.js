@@ -82,7 +82,9 @@ const LoginPage = () => {
           touched,
           isValid,
         }) => (
-          <>
+          <View style={{
+            justifyContent: "center",
+          }}>
             <View style={styles.inputContainer}>
               <View style={styles.fieldTitle}>
                 <Text style={styles.fieldTitleText}>Email</Text>
@@ -151,7 +153,7 @@ const LoginPage = () => {
                 color="#000000"
               />
             ) : null}
-          </>
+          </View>
         )}
       </Formik>
 
@@ -159,22 +161,6 @@ const LoginPage = () => {
         <View style={styles.otherLoginMethodsTextContainer}>
           <Text style={styles.otherLoginMethodsText}>Or </Text>
         </View>
-        <TouchableOpacity style={styles.socialMediaBtn}>
-          <Image
-            source={require("../../assets/google.png")}
-            style={styles.socialMediaIcon}
-          />
-          <Text style={styles.socialMediaText}>Sign in with Google</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.socialMediaBtn}>
-          <Image
-            source={require("../../assets/facebook.png")}
-            style={styles.socialMediaIcon}
-          />
-          <Text style={styles.socialMediaText}>Sign in with Facebook</Text>
-        </TouchableOpacity>
-
         <View style={styles.alreadyHasAccountContainer}>
           <Text style={styles.alreadyHasAccountText}>
             Don't have an account?

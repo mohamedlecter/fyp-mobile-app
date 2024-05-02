@@ -162,21 +162,6 @@ const SignUpPage = () => {
         <View style={styles.otherLoginMethodsTextContainer}>
           <Text style={styles.otherLoginMethodsText}>Or </Text>
         </View>
-        <TouchableOpacity style={styles.socialMediaBtn}>
-          <Image
-            source={require("../../assets/google.png")}
-            style={styles.socialMediaIcon}
-          />
-          <Text style={styles.socialMediaText}>Sign up with Google</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.socialMediaBtn}>
-          <Image
-            source={require("../../assets/facebook.png")}
-            style={styles.socialMediaIcon}
-          />
-          <Text style={styles.socialMediaText}>Sign up with Facebook</Text>
-        </TouchableOpacity>
 
         <View style={styles.alreadyHasAccountContainer}>
           <Text style={styles.alreadyHasAccountText}>

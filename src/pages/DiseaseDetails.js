@@ -43,7 +43,7 @@ const DiseaseDetails = ({ route }) => {
   }
 
   const formattedDisease = diseaseName.replace(/_/g, " ");
-  const formattedConfidence = confidence.toString().slice(0, 5);
+  const formattedConfidence = (confidence * 100).toString().slice(0, 5);
 
   const isHealthyDisease = (diseaseName) => {
     return diseaseName.toLowerCase().includes("healthy");
@@ -53,7 +53,6 @@ const DiseaseDetails = ({ route }) => {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.imageContainer}>
         <Image source={{ uri: imageUri }} style={styles.image} />
-        {/* Render the back icon inside the image */}
         <TouchableOpacity
           style={styles.backIconContainer}
           onPress={handleNavigateBack}
@@ -63,8 +62,7 @@ const DiseaseDetails = ({ route }) => {
       </View>
       <View style={styles.detailsContainer}>
         <Text style={styles.dieasesLabel}>
-          Predicted Disease: {formattedDisease} with confidence of{" "}
-          {formattedConfidence}
+          Predicted Disease: {formattedDisease} with confidence of {formattedConfidence}%
         </Text>
         {isHealthyDisease(diseaseName) ? (
           <View></View>
